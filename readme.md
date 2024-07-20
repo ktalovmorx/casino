@@ -4,7 +4,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-![Alt text](https://github.com/ktalovmorx/casino/blob/main/ruleta.jpg?raw=true)
+![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end.png?raw=true)
 
 <h3>Instalación de Librerias</h3>
 
