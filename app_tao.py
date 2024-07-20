@@ -114,7 +114,7 @@ class Controls(object):
         except:
             return {'status':False, 'payload':{}}
         else:
-            return {'status':True, 'payload':data}
+            return {'status':True, 'payload':payload}
 
     @staticmethod
     def admin_set_free_numbers():
