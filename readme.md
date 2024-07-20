@@ -16,6 +16,7 @@
         </tr>
         <tr>
             <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end5.jpg?raw=true"></td>
+            <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end6.jpg?raw=true"></td>
         </tr>
     </tbody>
 </table>
