@@ -8,7 +8,7 @@
     <tbody>
         <tr>
             <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end1.png?raw=true"></td>
-            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end2.PNG?raw=true"></td>
+            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end2.png?raw=true"></td>
         </tr>
         <tr>
             <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end3.png?raw=true"></td>
