@@ -610,6 +610,7 @@ CREATE TABLE public.roulette_settings(
 	zero_fix BOOL NOT NULL DEFAULT FALSE,															/*Indica si en esta mesa se deja el 0/00 fijo*/
 	form VARCHAR(12) NOT NULL DEFAULT '-'															/*Indica como se distribuye los espacios vacios a dejar STRAIGHT, PAIR, STREETS, DOZENS, SIXS*/
 );
+
 INSERT INTO public.roulette_settings (roulette_id,roulette_max_users,divisa,roulette_min_amount,roulette_max_amount,tao_commision,roulette_protected_type,probability,roulette_comment,require_users,max_earning,min_earning,user_covers,user_plays,roulette_min_invest,roulette_max_invest,zero_fix,form) VALUES
 	 ('R0009',1,'DOP',1.0,25,0.1,'X1','92.1','Cubre 33 números de la ruleta y 0/00.',1,22.5,4.5,3,35,175.0,875.0,false,'straights'),
 	 ('R0010',1,'DOP',1.0,25,0.1,'X1','92.1','Cubre 33 números de la ruleta y 0/00.',1,22.5,4.5,3,35,175.0,875.0,false,'straights'),
@@ -633,18 +634,20 @@ CREATE TABLE public.crupiers(
 	casino_account VARCHAR(64) REFERENCES public.casinos(casino_account), 		/*Casino asociado*/
 	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id)			/*Id de la ruleta*/
 );
+
 ALTER TABLE crupiers ADD CONSTRAINT no_duplicate_2 UNIQUE (affiliate_code, roulette_id);
+
 INSERT INTO public.crupiers (affiliate_code,username,userlastname,user_mail,user_pin,user_active,casino_account,roulette_id) VALUES
-	 ('CRP0001','José Ernesto','Morales Ventura','jomorales.ventura@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0003'),
-	 ('CRP0002','Santiago','Perez','sacherokee91@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0005'),
-	 ('CRP0003','Rafael','Oviedo','anonimo3@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0006'),
-	 ('CRP0004','José','Classgap','anonimo44@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0004'),
-	 ('CRP0005','Chica','Number1','anonimo55@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0007'),
-	 ('CRP0006','CRP0006','Anonimo','anonimo6@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0002'),
-	 ('CRP0007','CRP0007','Anonimo','anonimo7@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0001'),
-	 ('CRP0008','CRP0008','Anonimo','anonimo8@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0008'),
-	 ('CRP0009','CRP0009','Anonimo','anonimo9@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0009'),
-	 ('CRP0010','CRP0010','Anonimo','anonimo10@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0010');
+	 ('CRP0001','José Ernesto','Morales Ventura','jomorales.ventura@gmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0003'),
+	 ('CRP0002','Santiago','Perez','sacherokee91@gmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0005'),
+	 ('CRP0003','Rafael','Oviedo','anonimo3@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0006'),
+	 ('CRP0004','José','Classgap','anonimo44@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0004'),
+	 ('CRP0005','Chica','Number1','anonimo55@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0007'),
+	 ('CRP0006','CRP0006','Anonimo','anonimo6@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0002'),
+	 ('CRP0007','CRP0007','Anonimo','anonimo7@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0001'),
+	 ('CRP0008','CRP0008','Anonimo','anonimo8@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0008'),
+	 ('CRP0009','CRP0009','Anonimo','anonimo9@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0009'),
+	 ('CRP0010','CRP0010','Anonimo','anonimo10@hotmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2',true,'DOM48119','R0010');
 
 CREATE TABLE public.customers(
 	id SERIAL PRIMARY KEY,														/*Id serial*/
@@ -662,9 +665,10 @@ CREATE TABLE public.customers(
 	roulette_id VARCHAR(64),													/*DEBES DEJAR ESTO AQUI,*/
 	able_to_bet BOOL NOT NULL													/*Usuario indica su disponibilidad para apostar en mesas X2*/
 );
+
 INSERT INTO public.customers (affiliate_code,username,userlastname,usermail,user_pin,member_from_date,user_active,address,document_id,phone,casino_account,roulette_id,able_to_bet) VALUES
-	 ('AF0001','Briana','Dor','brianador2000@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203','2023-05-23',true,'Calle 4ta, Costa del Este 1','SD256542','809-966-2890','DOM48119','-',False),
-	 ('AF0002','Rafael ','Oviedo','rafaeloviedo576@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203','2023-06-04',true,'La Toronja','000-0000000-0','829-248-4025','DOM48119','-',False);
+	 ('AF0001','Briana','Dor','brianador2000@gmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2','2023-05-23',true,'Calle 4ta, Costa del Este 1','SD256542','809-966-2890','DOM48119','-',False),
+	 ('AF0002','Rafael ','Oviedo','rafaeloviedo576@gmail.com','4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2','2023-06-04',true,'La Toronja','000-0000000-0','829-248-4025','DOM48119','-',False);
 
 CREATE TABLE public.plays(
 	id SERIAL PRIMARY KEY,														/*Id serial*/

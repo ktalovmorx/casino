@@ -22,6 +22,28 @@ pip install -r requirements.txt
 - python app_tao.py
 ```
 
+<h3>CUSTOMERS</h3>
+<table class="table">
+    <thead>
+        <th>Customer</th>
+        <th>Password</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AF0001</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>AF0002</td>
+            <td>root</td>
+        </tr>
+    </tbody>
+</table>
+<ul>
+    <li>AF0001:root</li>
+    <li>AF0001:root</li>
+</ul>
+
 <h3>José Ernesto Morales Ventura | San Cristóbal | República Dominicana</h3>
 
 <span><span class="badge bg-primary">PYMES</span> Software and Consulting</span><br>
