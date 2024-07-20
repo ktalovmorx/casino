@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+__author__ = 'Jose E. Morales Ventura'
+__date__ = '01/01/2022'
+__description__ = ""
+__url__ = "https://softnow-ptv.homes"
+
 import os
 import qrcode
 import time
@@ -96,7 +104,7 @@ class Controls(object):
         ManageDatabase.close_connection(dbconn, cursor)
 
     @staticmethod
-    def update_token(roulette_id):
+    def update_token(roulette_id:str) -> dict:
         """
         Actualiza el token cuando el usuario entra a una nueva mesa. De esta forma en el token llevamos la informacion de la mesa donde está.
         """
@@ -117,7 +125,7 @@ class Controls(object):
             return {'status':True, 'payload':payload}
 
     @staticmethod
-    def admin_set_free_numbers():
+    def admin_set_free_numbers() -> None:
         pass 
 
     @staticmethod
@@ -135,7 +143,7 @@ class Controls(object):
             return {'status':True, 'payload':data}
 
     @staticmethod
-    def set_roulette_opens(roulette_id, numbers):
+    def set_roulette_opens(roulette_id, numbers) -> None:
         dbconn, cursor, status = ManageDatabase.open_connection(Controls.HOST, Controls.DATABASE, Controls.USER, Controls.PASSWORD, Controls.PORT)
         if not status:
             return []
@@ -151,7 +159,7 @@ class Controls(object):
         ManageDatabase.close_connection(dbconn, cursor)
 
     @staticmethod
-    def set_open_numbers(roulette_id) -> list:
+    def set_open_numbers(roulette_id:str) -> list:
         """
         Obtiene los numeros abiertos indicados por el crupier, es decir, se toman desde la base de datos.
         Esta funcion es para el usuario
@@ -214,7 +222,7 @@ class Controls(object):
             return []
 
     @staticmethod
-    def get_roulette_online_users(roulette_id, token):
+    def get_roulette_online_users(roulette_id:str, token:str):
         """
         Obtiene el total de usuarios conectados en la mesa, obviando al usuario crupier
         """
@@ -247,7 +255,7 @@ class Controls(object):
             return {}
 
     @staticmethod
-    def get_roulette_data(roulette_id, token) -> dict:
+    def get_roulette_data(roulette_id:str, token:str) -> dict:
         """
         """
         if str(roulette_id).startswith('R'):
@@ -277,7 +285,7 @@ class Controls(object):
             return {}
 
     @staticmethod
-    def get_roulettes(token) -> list:
+    def get_roulettes(token:str) -> list:
         """
         Retorna las mesas disponibles en el casino
         """
@@ -307,7 +315,7 @@ class Controls(object):
         return records
 
     @staticmethod
-    def get_session_round(roulette_id) -> int:
+    def get_session_round(roulette_id:str) -> int:
         """
         Obtiene el valor de la ronda actual
         """
@@ -332,7 +340,7 @@ class Controls(object):
         return round_number
 
     @staticmethod
-    def set_session_round(roulette_id) -> None:
+    def set_session_round(roulette_id:str) -> None:
         """
         Establece el valor de la ronda actual en la base de datos
         """
@@ -359,7 +367,7 @@ class Controls(object):
         ManageDatabase.close_connection(dbconn, cursor)
 
     @staticmethod
-    def calculate_unitary_amount(roulette_id) -> tuple:
+    def calculate_unitary_amount(roulette_id:str) -> tuple:
         """
         Calcula el monto unitario que se debe colocar en cada posicion de la mesa
         """
@@ -428,7 +436,7 @@ class Controls(object):
         return status, unitary
 
     @staticmethod
-    def bet_now(roulette_id) -> bool:
+    def bet_now(roulette_id:str) -> bool:
         """
         Llama al publico a apostar
         """
@@ -436,7 +444,7 @@ class Controls(object):
 
 
     @staticmethod
-    def get_active_users(roulette_id):
+    def get_active_users(roulette_id:str):
         dbconn, cursor, status = ManageDatabase.open_connection(Controls.HOST, Controls.DATABASE, Controls.USER, Controls.PASSWORD, Controls.PORT)
         #-- Saber quienes estan conectados a la mesa
         sql_query = """
@@ -455,7 +463,7 @@ class Controls(object):
         return records
 
     @staticmethod
-    def update_step(roulette_id, step:int, roulette_result=-1) -> bool:
+    def update_step(roulette_id:str, step:int, roulette_result:int=-1) -> bool:
 
         if step >= 3:
             no_more_bets = True
@@ -535,7 +543,7 @@ class Controls(object):
         return True
 
     @staticmethod
-    def publish_result(roulette_id,  roulette_result)->bool:
+    def publish_result(roulette_id:str, roulette_result:int)->bool:
         Controls.update_step(roulette_id, 6,  roulette_result)
 
         #-- Verificar si GANO o PERDIO
@@ -610,7 +618,7 @@ class Controls(object):
         ManageDatabase.close_connection(dbconn, cursor)
 
     @staticmethod
-    def spin_roulette(roulette_id) -> bool:
+    def spin_roulette(roulette_id:str) -> bool:
         """
         Llamado de boton NO MAS. Modifica STEP_CRUPIER en la base de datos haciendo que los usuarios no puedan apostar mas
         """
@@ -618,7 +626,7 @@ class Controls(object):
         return True
 
     @staticmethod
-    def no_more_bets(roulette_id) -> bool:
+    def no_more_bets(roulette_id:str) -> bool:
         """
         Llamado de boton NO MAS. Modifica STEP_CRUPIER en la base de datos haciendo que los usuarios no puedan apostar mas
         """
@@ -626,7 +634,7 @@ class Controls(object):
         return True
 
     @staticmethod
-    def get_table_amounts(roulette_id, token) -> list:
+    def get_table_amounts(roulette_id:str, token:str) -> list:
         """
         Obtiene los montos a ganar disponibles en la mesa
         """
@@ -652,7 +660,7 @@ class Controls(object):
         return records
 
     @staticmethod
-    def generate_numbers(roulette_id, total_numbers:int, zero_fix=False, _form='straight'):
+    def generate_numbers(roulette_id:str, total_numbers:int, zero_fix:bool=False, _form:str='straight') -> list:
         """
         Genera 2 numeros aleatorios. Esta funcion es para el administrador.
         """
@@ -670,7 +678,7 @@ class Controls(object):
         return numbers
 
     @staticmethod
-    def clear_user_table_status(affiliate_code, casino_account, roulette_id):
+    def clear_user_table_status(affiliate_code:str, casino_account:str, roulette_id:str):
         dbconn, cursor, status = ManageDatabase.open_connection(Controls.HOST, Controls.DATABASE, Controls.USER, Controls.PASSWORD, Controls.PORT)
         if not status:
             return []
@@ -705,11 +713,11 @@ class Controls(object):
         ManageDatabase.close_connection(dbconn, cursor)
 
     @staticmethod
-    def get_user_amount(token):
+    def get_user_amount(token:str) -> None:
         pass
 
     @staticmethod
-    def remove_session_keys():
+    def remove_session_keys() -> None:
         """
         Borra todas las posibles variables de session que han sido creadas
         """
@@ -718,7 +726,7 @@ class Controls(object):
             del session[str(k)]
 
     @staticmethod
-    def get_auto_bet_status(affiliate_code, roulette_id):
+    def get_auto_bet_status(affiliate_code:str, roulette_id:str) -> bool:
         """
         Obtiene el ultimo estado de auto apuesta del usuario
         """
@@ -1269,7 +1277,7 @@ def get_roulette_changes():
         return jsonify({'error':True})
 
 @app.route('/table/<roulette_id>', methods = ['GET'])
-def usr_view_table(roulette_id):
+def usr_view_table(roulette_id:str):
     """
     Muestra la mesa actualizada al usuario
     """
@@ -1364,7 +1372,7 @@ def signup_page():
     return render_template('signup_page.html')
    
 @app.route('/login_page', methods = ['GET'])
-def login_page():
+def login_page() -> object:
     """
     Mostrar pagina de login
     """
@@ -1374,7 +1382,7 @@ def login_page():
     return render_template('login_page.html')
 
 @app.route('/logout', methods = ['GET'])
-def logout():
+def logout() -> object:
     """
     Desloguear usuario y todo lo que ello implica
     """
@@ -1423,7 +1431,7 @@ def auth():
 
 @app.route('/', methods = ['GET'])
 @app.route('/casino', methods = ['GET'])
-def main_page():
+def main_page() -> object:
     """
     Mostrar pagina principal
     """
@@ -1432,16 +1440,16 @@ def main_page():
             return redirect(url_for('usr_view_table', roulette_id=session['roulette_id']))
     return render_template('main_page.html')
 
-@app.route('/<folder>/<filename>')
-def download(folder, filename):
+@app.route('/<string:folder>/<string:filename>')
+def download(folder:str, filename:str) -> object:
     """
     Sirve el archivo desde la ruta indicada
     """
     downloads_dir = os.path.join(os.path.expanduser('~'), folder)
     return send_from_directory(directory=downloads_dir, path=filename, as_attachment=True)
 
-@app.route('/files/<folder>/<filename>')
-def serve_static(folder, filename):
+@app.route('/files/<string:folder>/<string:filename>')
+def serve_static(folder:str, filename:str) -> object:
     root_dir = os.path.join(os.path.expanduser('~'), folder)
     response = send_from_directory(directory=root_dir, path=filename, as_attachment=True)
     response.headers['X-Accel-Buffering'] = 'no'
