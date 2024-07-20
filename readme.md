@@ -39,10 +39,64 @@ pip install -r requirements.txt
         </tr>
     </tbody>
 </table>
-<ul>
-    <li>AF0001:root</li>
-    <li>AF0001:root</li>
-</ul>
+
+<h3>CRUPIERS</h3>
+<table class="table">
+    <thead>
+        <th>Crupier</th>
+        <th>Password</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>CRP0001</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>CRP0002</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>CRP0003</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>CRP0004</td>
+            <td>root</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>PARTNERS</h3>
+<table class="table">
+    <thead>
+        <th>Partner</th>
+        <th>Password</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>PAR0001</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>PAR0002</td>
+            <td>root</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>ADMINS</h3>
+<table class="table">
+    <thead>
+        <th>Admin</th>
+        <th>Password</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>TAO0</td>
+            <td>root</td>
+        </tr>
+    </tbody>
+</table>
 
 <h3>José Ernesto Morales Ventura | San Cristóbal | República Dominicana</h3>
 
