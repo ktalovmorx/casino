@@ -4,15 +4,15 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-<table class="table">
+<table class="table table-hover">
     <tbody>
         <tr>
-            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end1.png?raw=true"></td>
-            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end2.png?raw=true"></td>
+            <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end1.png?raw=true"></td>
+            <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end2.png?raw=true"></td>
         </tr>
         <tr>
-            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end3.png?raw=true"></td>
-            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end4.png?raw=true"></td>
+            <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end3.png?raw=true"></td>
+            <td><img class="rounded" src="https://github.com/ktalovmorx/casino/blob/main/front_end4.png?raw=true"></td>
         </tr>
     </tbody>
 </table>
