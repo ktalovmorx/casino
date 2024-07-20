@@ -9,6 +9,7 @@ ALTER USER tao WITH SUPERUSER;
 CREATE DATABASE casinos_tao WITH OWNER = tao;
 GRANT ALL PRIVILEGES ON DATABASE casinos_tao TO tao;
 COMMENT ON DATABASE casinos_tao IS 'Base de datos de los casinos';
+
 --DATABASE STRUCTURE
 
 CREATE TABLE public.admins(
@@ -20,6 +21,7 @@ CREATE TABLE public.admins(
 	admin_pin TEXT NOT NULL,													/*Contrasena del usuario*/
 	user_active BOOL NOT NULL													/*Indica si el usuario puede usar la herramienta*/
 );
+
 INSERT INTO public.admins (affiliate_code,username,userlastname,user_mail,admin_pin,user_active) VALUES
 	 ('TAO0','Craazy','Bones','craazybones@gmail.com','root',true);
 
@@ -28,6 +30,7 @@ CREATE TABLE public.divisas(
 	divisa VARCHAR(4) DEFAULT 'DOP' UNIQUE,												/*Tipo de divisa aceptada DOP | USD*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.divisas (divisa,admin_code) VALUES
 	 ('DOP','TAO0'),
 	 ('USD','TAO0');
@@ -58,6 +61,7 @@ CREATE TABLE public.games_probabilities(
 	description_roulette TEXT,															/*Descripcion de estas mesas*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.games_probabilities (probability,description_roulette,admin_code) VALUES
 	 ('0','Solo se utiliza para mesas que no estan definidas aun','TAO0'),
 	 ('67.5','Este tipo de juego ofrece un 67.5% de probabilidad de ganar. [0,############] El cero se llena con 1 unidad del usuario y se coloca 1 unidad a una docena. Los 25 sobrantes se coloca el valor necesario.','TAO0'),
@@ -76,6 +80,7 @@ CREATE TABLE public.amounts(
 	amount_available BOOL NOT NULL,														/*Indica si esta o no disponible*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
 	 (0.2,true,'TAO0'),
 	 (0.4,true,'TAO0'),
@@ -295,6 +300,7 @@ CREATE TABLE public.protected_types(
 	type_description TEXT,																/*Descripcion*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.protected_types (type_name,type_description,admin_code) VALUES
 	 ('X0','Indica que no tiene una forma definida aun, no esta habilitada para uso','TAO0'),
 	 ('X1','Una sola oportunidad, se utiliza en mesas que soportan poco dinero','TAO0'),
@@ -307,6 +313,7 @@ CREATE TABLE public.roulettes_types(
 	roulette_type VARCHAR(64) NOT NULL UNIQUE,											/*Tipo de ruleta EU, AM, FR*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.roulettes_types (roulette_type,admin_code) VALUES
 	 ('EU','TAO0'),
 	 ('AM','TAO0'),
@@ -320,6 +327,7 @@ CREATE TABLE public.roulettes(
 	roulette_type VARCHAR(64) REFERENCES public.roulettes_types(roulette_type),			/*Tipo de ruleta America, Europea, Francesa*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.roulettes (roulette_name,roulette_id,roulette_image,roulette_type,admin_code) VALUES
 	 ('American Roulette','R0001','img/roulette0.png','AM','TAO0'),
 	 ('European Roulette','R0002','img/roulette1.png','EU','TAO0'),
@@ -340,6 +348,7 @@ CREATE TABLE public.casinos(
 	creation_date DATE,																		/*Fecha en que se creo el casino*/
 	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
 );
+
 INSERT INTO public.casinos (casino_account,casino_name,casino_active,creation_date,admin_code) VALUES
 	('DOM48119','CRAAZYBONES',true,'2023-05-22','TAO0'),
 	('DOM81203','CHEROKEE',true,'2023-05-22','TAO0');
@@ -359,8 +368,10 @@ CREATE TABLE public.casinos_roulettes(
     no_more_bets BOOL NOT NULL DEFAULT FALSE,														/**/
     roulette_step INTEGER DEFAULT 1																/**/
 );
+
 ALTER TABLE casinos_roulettes ADD CONSTRAINT no_duplicate_1 UNIQUE (casino_account, roulette_id);
-INSERT INTO public.casinos_roulettes (casino_account,roulette_id,roulette_active,round_number,crupier_step,free_numbers,tao_number,last_update,roulette_result,next_amount) VALUES
+
+INSERT INTO public.casinos_roulettes (casino_account,roulette_id,roulette_active,round_number,crupier_step,free_numbers,tao_number,last_update,roulette_result,next_amount,roulette_step) VALUES
 	 ('DOM48119','R0001',true,0,2,'-','0',NULL,'-1',-1,1),
 	 ('DOM48119','R0002',true,0,2,'-','0',NULL,'-1',-1,1),
 	 ('DOM48119','R0003',true,0,2,'-','0',NULL,'-1',-1,1),
@@ -378,6 +389,7 @@ CREATE TABLE public.roulette_amounts(
 	amount FLOAT REFERENCES public.amounts(amount),										/**/
 	amount_active BOOL NOT NULL DEFAULT TRUE											/*Indica si la mesa este valor esta disponible*/
 );
+
 INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
 	 ('R0001',8.0,true),
 	 ('R0001',7.0,true),

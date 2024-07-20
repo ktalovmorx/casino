@@ -16,7 +16,8 @@ pip install -r requirements.txt
 
 ```
 - git clone https://github.com/ktalovmorx/casino.git
-- Abra su gestor de base de datos y cree su base de datos desde tao.db
+- Abra su gestor de base de datos(pgAdmin4, Dbeaver, etc...) y cree su base de datos desde tao.db
+- Hága la integración de la base de datos por etapas
 - cd casino
 - python app_tao.py
 ```
