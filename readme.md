@@ -4,9 +4,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end.png?raw=true)
-![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end3.PNG?raw=true)
-![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end4.png?raw=true)
+<table class="table">
+    <tbody>
+        <tr>
+            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end1.png?raw=true"></td>
+            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end2.PNG?raw=true"></td>
+        </tr>
+        <tr>
+            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end3.png?raw=true"></td>
+            <td><img src="https://github.com/ktalovmorx/casino/blob/main/front_end4.png?raw=true"></td>
+        </tr>
+    </tbody>
+</table>
 
 <h3>Instalación de Librerias</h3>
 
