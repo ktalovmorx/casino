@@ -1257,7 +1257,7 @@ def spin_roulette():
     if 'token' in session.keys():
         if session['affiliate_code'].startswith('CRP'):
             Controls.spin_roulette(session['roulette_id'])
-            return jsonify({'message':'Prepare la ruleta con la ficha indicada luego reporte el resultado'})
+            return jsonify({'message':'Prepare la ruleta con la ficha indicada, luego reporte el resultado'})
         else:
             Controls.remove_session_keys()
             return render_template('denegado.html'), 404
