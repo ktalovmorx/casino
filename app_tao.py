@@ -1467,4 +1467,4 @@ def serve_static(folder:str, filename:str) -> object:
 
 if __name__ == '__main__':
     Controls.stand_up_all_users()
-    app.run(debug=True, port=PORT_FLASK, host='0.0.0.0')
+    app.run(debug=True, port=PORT_FLASK)
