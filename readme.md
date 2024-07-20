@@ -6,6 +6,7 @@
 
 ![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end.png?raw=true)
 ![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end2.png?raw=true)
+![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end3.png?raw=true)
 
 <h3>Instalación de Librerias</h3>
 
