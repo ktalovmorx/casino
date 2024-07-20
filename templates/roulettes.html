@@ -14,9 +14,9 @@
 		  <strong>Bienvenido!</strong>, escoja una mesa de su preferencia.
 		</div>
 	</div-->
-	<div style='display:flex;flex-wrap: wrap;'>
+	<div style='display:flex;flex-direction:row;flex-wrap: wrap;'>
 		{% for roulette in roulettes %}
-			<div class='container col-md-2 col-sm-12 tao_card rounded-4' style='margin:2px'>
+			<div class="tao_card rounded-4" style='margin:2px'>
 				<form method='GET' action='/table/{{roulette.roulette_id}}'>
 					<table class='table table-sm table-hover table-borderless' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;'>
 						<caption style='font-size:12px;font-weight:bold;caption-side: top;'>
