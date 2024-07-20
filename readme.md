@@ -5,7 +5,6 @@
 
 
 ![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end.png?raw=true)
-![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end2.png?raw=true)
 ![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end3.PNG?raw=true)
 ![Alt text](https://github.com/ktalovmorx/casino/blob/main/front_end4.png?raw=true)
 
