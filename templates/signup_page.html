@@ -1,0 +1,148 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+	<div class='container-fluid p-1 text-center rounded-1' style='width:100%;margin-bottom:10px;margin-top:10px'>
+		<div class='container-fluid'>
+			<div class='col'>
+				<img src="{{ url_for('static', filename='img/tao_let.png') }}" alt='TAO' width=100>
+			</div>
+		</div>
+		<div class='container-fluid row' style='margin:0px;padding:0px;'>
+			<div class='flex-container' style='padding:0px;margin:0px'>
+				<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+					<a href='/casino' style='font-size:13px;font-family: "OCR-A", monospace;'> Inicio</a>
+				</button>
+				{% if not session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/login_page' style='font-size:13px;font-family: "OCR-A", monospace;'> Acceder</a>
+					</button>
+				{% endif %}
+				<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+					<a href='/help' style='font-size:13px;font-family: "OCR-A", monospace;'> Informaci&oacute;n</a>
+				</button>
+			    {% if session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/roulettes' style='font-size:13px;font-family: "OCR-A", monospace;'> Roulettes</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-info' style='border:none;'>
+						<a href='/reports' style='font-size:13px;font-family: "OCR-A", monospace;'> Reportes</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/history' style='font-size:13px;font-family: "OCR-A", monospace;'> Hist&oacute;rico</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/withdraw' style='font-size:13px;font-family: "OCR-A", monospace;'> Retiro</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/deposit' style='font-size:13px;font-family: "OCR-A", monospace;'> Dep&oacute;sito</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/logout' style='font-size:13px;color:red;font-family: "OCR-A", monospace;'> Salir</a>
+					</button>
+			    {% endif %}
+			</div>
+		</div>
+	</div>
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+		</div>
+	{% endif %}
+	<hr class='border border-success'>
+	<div class='container-fluid col-md-5 col-lg-5 col-sm-12' style='padding:0px'>
+		<form method='POST' action='/register' class='was-validated  form-control' style='background-color:transparent'>
+			<div class='container-fluid'>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for="email" class="form-label">Correo</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='text' class='form-control' id="email" placeholder="Ingrese su correo" name="email" required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for='pwd' class='form-label'>PIN</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='password' class='form-control' id='pwd' placeholder='Ingrese PIN(6 digitos)' name='pwd' required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for='pwd2' class='form-label'>Repetir PIN</label>
+					</div>
+					<div class='col-md-9'>
+						<input type='password' class='form-control' id='pwd2' placeholder='Repita su PIN por favor' name='pwd2' required>
+						<div class='valid-feedback'>V&aacute;lido.</div>
+						<div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for="name" class="form-label">Nombre</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='text' class='form-control' id='name' placeholder='Ingrese su primer nombre' name='name' required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for="lastname" class="form-label">Apellido</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='text' class='form-control' id='lastname' placeholder='Ingrese su(s) apellido(s)' name='lastname' required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for='doc_id' class="form-label">Documento de Identidad</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='text' class='form-control' id='doc_id' placeholder='Documento de Identidad' name='doc_id' required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for='phone' class='form-label'>Tel&eacute;fono</label>
+					</div>
+					<div class='col-md-9'>
+					    <input type='phone' class='form-control' id='phone' placeholder='Ingrese su telefono' name='phone' required>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'>
+						<label for='phone' class='form-label'>Casino</label>
+					</div>
+					<div class='col-md-9'>
+						<select class='form-control form-select' id='casino_account' placeholder='Casino' name='casino_account' required>
+						  <option>DOM48119</option>
+						  <option>DOM81203</option>
+						</select>
+					    <div class='valid-feedback'>V&aacute;lido.</div>
+					    <div class='invalid-feedback'>Por favor, rellene el campo</div>
+					</div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col-md-3'></div>
+					<div class='col-md-9'>
+						<button type='submit' class='btn btn-outline-secondary' style='width:100%'>Enviar solicitud</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}

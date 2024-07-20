@@ -1,0 +1,710 @@
+/*Base de datos tao*/
+/*Postgres 10.14*/
+/*Jose Morales*/
+
+--DATABASE CREATION
+CREATE USER tao WITH PASSWORD 'root';
+ALTER USER tao CREATEDB;
+ALTER USER tao WITH SUPERUSER;
+CREATE DATABASE casinos_tao WITH OWNER = tao;
+GRANT ALL PRIVILEGES ON DATABASE casinos_tao TO tao;
+COMMENT ON DATABASE casinos_tao IS 'Base de datos de los casinos';
+--DATABASE STRUCTURE
+
+CREATE TABLE public.admins(
+	id SERIAL PRIMARY KEY,														/*Id serial*/
+	affiliate_code VARCHAR(64) UNIQUE NOT NULL, 									/*Id unico de usuario*/
+	username VARCHAR(64) NOT NULL,											/*Nombre del usuario*/
+	userlastname VARCHAR(64) NOT NULL,										/*Apellido del usuario*/
+	user_mail VARCHAR(64) NOT NULL,											/*Correo electronico del usuario*/
+	admin_pin TEXT NOT NULL,													/*Contrasena del usuario*/
+	user_active BOOL NOT NULL													/*Indica si el usuario puede usar la herramienta*/
+);
+INSERT INTO public.admins (affiliate_code,username,userlastname,user_mail,admin_pin,user_active) VALUES
+	 ('TAO0','Craazy','Bones','craazybones@gmail.com','root',true);
+
+CREATE TABLE public.divisas(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	divisa VARCHAR(4) DEFAULT 'DOP' UNIQUE,												/*Tipo de divisa aceptada DOP | USD*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.divisas (divisa,admin_code) VALUES
+	 ('DOP','TAO0'),
+	 ('USD','TAO0');
+
+CREATE TABLE public.partners(
+	id SERIAL PRIMARY KEY,												/*Id serial*/
+	affiliate_code VARCHAR(64) UNIQUE NOT NULL, 							/*Id unico de usuario*/
+	username VARCHAR(64) NOT NULL,										/*Nombre del usuario*/
+	userlastname VARCHAR(64) NOT NULL,									/*Apellido del usuario*/
+	usermail VARCHAR(64) UNIQUE NOT NULL,								/*Correo electronico del usuario*/
+	user_pin TEXT NOT NULL,											/*Contrasena del usuario*/
+	member_from_date DATE,												/*Fecha de ingreso del usuario*/
+	user_active BOOL NOT NULL,											/*Indica si el usuario puede usar la herramienta*/
+	address TEXT,														/*Direccion fisica del usuario*/
+	document_id VARCHAR(64) NOT NULL,									/*Nombre del usuario*/
+	phone VARCHAR(24) NOT NULL,											/*Phone number*/
+	casino_account VARCHAR(64) UNIQUE NOT NULL,							/*Cuenta de casino*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)			/*Usuario administrador que creo esto*/
+);
+
+INSERT INTO public.partners (affiliate_code,username,userlastname,usermail,user_pin,member_from_date,user_active,address,document_id,phone,casino_account,admin_code) VALUES
+	 ('PAR0001','Jose Ernesto','Morales Ventura','jomorales.ventura@gmail.com','root','2023-05-22',true,'Calle 4ta, Edificio Costa del Este 1','402-2022654-8','829-923-6045','DOM48119','TAO0'),
+	 ('PAR0002','Santiago','Perez','sacherokee91@gmail.com','root','2023-05-22',true,'Calle 4ta, La Caleta','402-000000-0','809-555-5555','DOM81203','TAO0');
+
+CREATE TABLE public.games_probabilities(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	probability VARCHAR(12) UNIQUE,														/*Valor de una probabilidad*/
+	description_roulette TEXT,															/*Descripcion de estas mesas*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.games_probabilities (probability,description_roulette,admin_code) VALUES
+	 ('0','Solo se utiliza para mesas que no estan definidas aun','TAO0'),
+	 ('67.5','Este tipo de juego ofrece un 67.5% de probabilidad de ganar. [0,############] El cero se llena con 1 unidad del usuario y se coloca 1 unidad a una docena. Los 25 sobrantes se coloca el valor necesario.','TAO0'),
+	 ('86.8','Este tipo de juego ofrece un 86.8% de probabilidad de ganar. ','TAO0'),
+	 ('89.1','Este tipo de juego ofrece un 89.1% de probabilidad de ganar. [0, ###] 0 es TAO y se deja se coloca 1 Unidad en una calle.','TAO0'),
+	 ('91.8','Este tipo de juego ofrece un 91.8% de probabilidad de ganar. [0,##] El cero se llena con 1 unidad del usuario y se coloca 1 unidad a un par. Los 34 sobrantes se coloca el valor necesario.','TAO0'),
+	 ('92.1','Este tipo de juego ofrece un 92.1% de probabilidad de ganar. [0/00,##] El cero se llena con 1 unidad del usuario y se coloca 1 unidad a un par. Los 35 sobrantes se coloca el valor necesario.','TAO0'),
+	 ('94.5','Este tipo de juego ofrece un 94.5% de probabilidad de ganar. Varia el numero TAO y el DRAW','TAO0'),
+	 ('84.2','Este tipo de juego ofrece un 84.2% de probabilidad de ganar. ','TAO0'),
+	 ('89.4','Este tipo de juego ofrece un 89.4% de probabilidad de ganar. ','TAO0'),
+	 ('78.9','Este tipo de juego ofrece un 78.9% de probabilidad de ganar. ','TAO0');
+
+CREATE TABLE public.amounts(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	amount FLOAT DEFAULT 0.0 UNIQUE,													/*Monto*/
+	amount_available BOOL NOT NULL,														/*Indica si esta o no disponible*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (0.2,true,'TAO0'),
+	 (0.4,true,'TAO0'),
+	 (0.6,true,'TAO0'),
+	 (0.8,true,'TAO0'),
+	 (1.0,true,'TAO0'),
+	 (1.6,true,'TAO0'),
+	 (1.66,true,'TAO0'),
+	 (2.0,true,'TAO0'),
+	 (2.5,true,'TAO0'),
+	 (3.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (4.0,true,'TAO0'),
+	 (5.0,true,'TAO0'),
+	 (6.0,true,'TAO0'),
+	 (7.0,true,'TAO0'),
+	 (8.0,true,'TAO0'),
+	 (9.0,true,'TAO0'),
+	 (10.0,true,'TAO0'),
+	 (11.0,true,'TAO0'),
+	 (12.0,true,'TAO0'),
+	 (13.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (14.0,true,'TAO0'),
+	 (15.0,true,'TAO0'),
+	 (16.0,true,'TAO0'),
+	 (17.0,true,'TAO0'),
+	 (18.0,true,'TAO0'),
+	 (19.0,true,'TAO0'),
+	 (20.0,true,'TAO0'),
+	 (21.0,true,'TAO0'),
+	 (22.0,true,'TAO0'),
+	 (23.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (24.0,true,'TAO0'),
+	 (25.0,true,'TAO0'),
+	 (26.0,true,'TAO0'),
+	 (27.0,true,'TAO0'),
+	 (28.0,true,'TAO0'),
+	 (29.0,true,'TAO0'),
+	 (30.0,true,'TAO0'),
+	 (35.0,true,'TAO0'),
+	 (40.0,true,'TAO0'),
+	 (45.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (50.0,true,'TAO0'),
+	 (60.0,true,'TAO0'),
+	 (70.0,true,'TAO0'),
+	 (71.0,true,'TAO0'),
+	 (72.0,true,'TAO0'),
+	 (73.0,true,'TAO0'),
+	 (74.0,true,'TAO0'),
+	 (75.0,true,'TAO0'),
+	 (76.0,true,'TAO0'),
+	 (77.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (78.0,true,'TAO0'),
+	 (79.0,true,'TAO0'),
+	 (80.0,true,'TAO0'),
+	 (81.0,true,'TAO0'),
+	 (82.0,true,'TAO0'),
+	 (83.0,true,'TAO0'),
+	 (84.0,true,'TAO0'),
+	 (85.0,true,'TAO0'),
+	 (90.0,true,'TAO0'),
+	 (100.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (101.0,true,'TAO0'),
+	 (102.0,true,'TAO0'),
+	 (103.0,true,'TAO0'),
+	 (104.0,true,'TAO0'),
+	 (105.0,true,'TAO0'),
+	 (106.0,true,'TAO0'),
+	 (107.0,true,'TAO0'),
+	 (108.0,true,'TAO0'),
+	 (109.0,true,'TAO0'),
+	 (110.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (120.0,true,'TAO0'),
+	 (125.0,true,'TAO0'),
+	 (130.0,true,'TAO0'),
+	 (140.0,true,'TAO0'),
+	 (141.0,true,'TAO0'),
+	 (142.0,true,'TAO0'),
+	 (143.0,true,'TAO0'),
+	 (144.0,true,'TAO0'),
+	 (150.0,true,'TAO0'),
+	 (151.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (152.0,true,'TAO0'),
+	 (153.0,true,'TAO0'),
+	 (154.0,true,'TAO0'),
+	 (155.0,true,'TAO0'),
+	 (156.0,true,'TAO0'),
+	 (157.0,true,'TAO0'),
+	 (158.0,true,'TAO0'),
+	 (159.0,true,'TAO0'),
+	 (160.0,true,'TAO0'),
+	 (161.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (162.0,true,'TAO0'),
+	 (163.0,true,'TAO0'),
+	 (164.0,true,'TAO0'),
+	 (165.0,true,'TAO0'),
+	 (166.0,true,'TAO0'),
+	 (167.0,true,'TAO0'),
+	 (168.0,true,'TAO0'),
+	 (169.0,true,'TAO0'),
+	 (170.0,true,'TAO0'),
+	 (180.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (190.0,true,'TAO0'),
+	 (191.0,true,'TAO0'),
+	 (192.0,true,'TAO0'),
+	 (193.0,true,'TAO0'),
+	 (194.0,true,'TAO0'),
+	 (195.0,true,'TAO0'),
+	 (196.0,true,'TAO0'),
+	 (197.0,true,'TAO0'),
+	 (198.0,true,'TAO0'),
+	 (199.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (200.0,true,'TAO0'),
+	 (210.0,true,'TAO0'),
+	 (220.0,true,'TAO0'),
+	 (230.0,true,'TAO0'),
+	 (240.0,true,'TAO0'),
+	 (243.0,true,'TAO0'),
+	 (250.0,true,'TAO0'),
+	 (260.0,true,'TAO0'),
+	 (270.0,true,'TAO0'),
+	 (280.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (290.0,true,'TAO0'),
+	 (300.0,true,'TAO0'),
+	 (310.0,true,'TAO0'),
+	 (320.0,true,'TAO0'),
+	 (330.0,true,'TAO0'),
+	 (340.0,true,'TAO0'),
+	 (350.0,true,'TAO0'),
+	 (360.0,true,'TAO0'),
+	 (370.0,true,'TAO0'),
+	 (380.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (390.0,true,'TAO0'),
+	 (400.0,true,'TAO0'),
+	 (410.0,true,'TAO0'),
+	 (420.0,true,'TAO0'),
+	 (430.0,true,'TAO0'),
+	 (440.0,true,'TAO0'),
+	 (450.0,true,'TAO0'),
+	 (460.0,true,'TAO0'),
+	 (470.0,true,'TAO0'),
+	 (480.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (490.0,true,'TAO0'),
+	 (500.0,true,'TAO0'),
+	 (600.0,true,'TAO0'),
+	 (700.0,true,'TAO0'),
+	 (800.0,true,'TAO0'),
+	 (900.0,true,'TAO0'),
+	 (1000.0,true,'TAO0'),
+	 (1100.0,true,'TAO0'),
+	 (1200.0,true,'TAO0'),
+	 (1250.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (1300.0,true,'TAO0'),
+	 (1400.0,true,'TAO0'),
+	 (1500.0,true,'TAO0'),
+	 (1600.0,true,'TAO0'),
+	 (1700.0,true,'TAO0'),
+	 (1800.0,true,'TAO0'),
+	 (1900.0,true,'TAO0'),
+	 (2000.0,true,'TAO0'),
+	 (2100.0,true,'TAO0'),
+	 (2200.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (2300.0,true,'TAO0'),
+	 (2400.0,true,'TAO0'),
+	 (2500.0,true,'TAO0'),
+	 (2600.0,true,'TAO0'),
+	 (2700.0,true,'TAO0'),
+	 (2800.0,true,'TAO0'),
+	 (2900.0,true,'TAO0'),
+	 (3000.0,true,'TAO0'),
+	 (3100.0,true,'TAO0'),
+	 (3200.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (3300.0,true,'TAO0'),
+	 (3400.0,true,'TAO0'),
+	 (3500.0,true,'TAO0'),
+	 (3600.0,true,'TAO0'),
+	 (3700.0,true,'TAO0'),
+	 (3800.0,true,'TAO0'),
+	 (3900.0,true,'TAO0'),
+	 (4000.0,true,'TAO0'),
+	 (4100.0,true,'TAO0'),
+	 (4200.0,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (4300.0,true,'TAO0'),
+	 (4400.0,true,'TAO0'),
+	 (4500.0,true,'TAO0'),
+	 (4600.0,true,'TAO0'),
+	 (4700.0,true,'TAO0'),
+	 (4800.0,true,'TAO0'),
+	 (4900.0,true,'TAO0'),
+	 (5000.0,true,'TAO0'),
+	 (0.25,true,'TAO0'),
+	 (0.125,true,'TAO0');
+INSERT INTO public.amounts (amount,amount_available,admin_code) VALUES
+	 (0.0625,true,'TAO0'),
+	 (0.67,true,'TAO0');
+
+CREATE TABLE public.protected_types(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	type_name VARCHAR(4) UNIQUE NOT NULL,												/*x1, x2,...*/
+	type_description TEXT,																/*Descripcion*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.protected_types (type_name,type_description,admin_code) VALUES
+	 ('X0','Indica que no tiene una forma definida aun, no esta habilitada para uso','TAO0'),
+	 ('X1','Una sola oportunidad, se utiliza en mesas que soportan poco dinero','TAO0'),
+	 ('X2','Dos oportunidades, se utiliza en mesas que soportan una cantidad de dinero intermedia','TAO0'),
+	 ('X3','Tres oportunidades, se utiliza en mesas que soportan gran cantidad de dinero. Aqui aprovechamos para bajar el nivel de seguridad y aumentar las ganancias.','TAO0'),
+	 ('X6','Seis oportunidades, se utiliza para juegos donde dejamos 1 docena completa abierta.','TAO0');
+
+CREATE TABLE public.roulettes_types(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	roulette_type VARCHAR(64) NOT NULL UNIQUE,											/*Tipo de ruleta EU, AM, FR*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.roulettes_types (roulette_type,admin_code) VALUES
+	 ('EU','TAO0'),
+	 ('AM','TAO0'),
+	 ('FR','TAO0');
+
+CREATE TABLE public.roulettes(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	roulette_name VARCHAR(64) NOT NULL DEFAULT '-',										/*Nombre de la tabla*/
+	roulette_id VARCHAR(64) UNIQUE,														/*Id de la ruleta*/
+	roulette_image TEXT,																/*Ruta de la imagen de la ruleta*/
+	roulette_type VARCHAR(64) REFERENCES public.roulettes_types(roulette_type),			/*Tipo de ruleta America, Europea, Francesa*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.roulettes (roulette_name,roulette_id,roulette_image,roulette_type,admin_code) VALUES
+	 ('American Roulette','R0001','img/roulette0.png','AM','TAO0'),
+	 ('European Roulette','R0002','img/roulette1.png','EU','TAO0'),
+	 ('European Roulette  First Person','R0003','img/roulette2.png','EU','TAO0'),
+	 ('European Roulette 300 Carat','R0004','img/roulette3.png','EU','TAO0'),
+	 ('Roulette Single Zero','R0005','img/roulette4.png','AM','TAO0'),
+	 ('French Roulette','R0007','img/roulette6.png','FR','TAO0'),
+	 ('European Roulette B.','R0006','img/roulette5.png','EU','TAO0'),
+	 ('VIP Roulette 1','R0009','img/roulette8.png','AM','TAO0'),
+	 ('VIP Roulette 2','R0010','img/roulette9.png','AM','TAO0'),
+	 ('VIP Roulette Single Zero','R0008','img/roulette7.png','AM','TAO0');
+
+CREATE TABLE public.casinos(
+	id SERIAL PRIMARY KEY,																	/*Id serial*/
+	casino_account VARCHAR(64) REFERENCES public.partners(casino_account) UNIQUE ,			/*Cuenta de casino*/
+	casino_name VARCHAR(64) NOT NULL,														/*Nombre del casino*/
+	casino_active BOOL NOT NULL,															/*Indica si el casino esta o no disponible*/
+	creation_date DATE,																		/*Fecha en que se creo el casino*/
+	admin_code VARCHAR(64) REFERENCES public.admins(affiliate_code)							/*Usuario administrador que creo esto*/
+);
+INSERT INTO public.casinos (casino_account,casino_name,casino_active,creation_date,admin_code) VALUES
+	('DOM48119','CRAAZYBONES',true,'2023-05-22','TAO0'),
+	('DOM81203','CHEROKEE',true,'2023-05-22','TAO0');
+
+CREATE TABLE public.casinos_roulettes(
+	id SERIAL PRIMARY KEY,																			/*Id serial*/
+	casino_account VARCHAR(64) REFERENCES public.casinos(casino_account), 							/*Casino asociado*/
+	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id),								/*Id de la ruleta*/
+	roulette_active BOOL NOT NULL,																	/*Indica si la mesa esta o no disponible para juegos*/
+	round_number INTEGER DEFAULT 0,																	/*Ronda actual*/
+	crupier_step INTEGER DEFAULT 0,																	/*Paso por donde va el crupier (Apostar, Cerrar, Girar, Presentar)*/
+	free_numbers VARCHAR(12) DEFAULT '-',															/*Numeros a dejar libres*/
+	tao_number VARCHAR(12) DEFAULT '0',																/*Numero TAO de la mesa*/
+	last_update TIMESTAMP,																			/*Ultima vez que hubo un cambio*/
+    roulette_result VARCHAR(12) DEFAULT '-1',                                                       /*Resultado final*/
+    next_amount INTEGER NOT NULL DEFAULT -1,														/*Numero de la proxima ronda*/
+    no_more_bets BOOL NOT NULL DEFAULT FALSE,														/**/
+    roulette_step INTEGER DEFAULT 1																/**/
+);
+ALTER TABLE casinos_roulettes ADD CONSTRAINT no_duplicate_1 UNIQUE (casino_account, roulette_id);
+INSERT INTO public.casinos_roulettes (casino_account,roulette_id,roulette_active,round_number,crupier_step,free_numbers,tao_number,last_update,roulette_result,next_amount) VALUES
+	 ('DOM48119','R0001',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0002',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0003',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0004',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0005',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0006',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0007',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0008',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0009',true,0,2,'-','0',NULL,'-1',-1,1),
+	 ('DOM48119','R0010',true,0,2,'-','0',NULL,'-1',-1,1);
+
+CREATE TABLE public.roulette_amounts(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id),					/*Id de la ruleta*/
+	amount FLOAT REFERENCES public.amounts(amount),										/**/
+	amount_active BOOL NOT NULL DEFAULT TRUE											/*Indica si la mesa este valor esta disponible*/
+);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0001',8.0,true),
+	 ('R0001',7.0,true),
+	 ('R0001',9.0,true),
+	 ('R0001',2.0,true),
+	 ('R0001',11.0,true),
+	 ('R0001',12.0,true),
+	 ('R0001',25.0,true),
+	 ('R0001',5.0,true),
+	 ('R0001',1.0,true),
+	 ('R0001',0.125,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0001',3.0,true),
+	 ('R0001',10.0,true),
+	 ('R0001',6.0,true),
+	 ('R0001',4.0,true),
+	 ('R0002',0.6,false),
+	 ('R0002',0.8,false),
+	 ('R0002',20.0,false),
+	 ('R0002',1.6,false),
+	 ('R0002',18.0,false),
+	 ('R0002',16.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0002',14.0,false),
+	 ('R0002',1.0,true),
+	 ('R0002',2.0,false),
+	 ('R0002',3.0,false),
+	 ('R0002',4.0,false),
+	 ('R0002',5.0,false),
+	 ('R0002',6.0,false),
+	 ('R0002',7.0,false),
+	 ('R0002',8.0,false),
+	 ('R0002',10.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0002',12.0,false),
+	 ('R0002',80.0,true),
+	 ('R0002',50.0,false),
+	 ('R0002',40.0,false),
+	 ('R0002',0.2,false),
+	 ('R0002',0.4,false),
+	 ('R0003',230.0,false),
+	 ('R0003',50.0,false),
+	 ('R0003',60.0,false),
+	 ('R0003',70.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0003',80.0,false),
+	 ('R0003',90.0,false),
+	 ('R0003',100.0,false),
+	 ('R0003',110.0,false),
+	 ('R0003',120.0,false),
+	 ('R0003',130.0,false),
+	 ('R0003',2.5,true),
+	 ('R0003',200.0,true),
+	 ('R0003',250.0,false),
+	 ('R0003',300.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0003',400.0,false),
+	 ('R0003',500.0,false),
+	 ('R0003',10.0,false),
+	 ('R0003',25.0,false),
+	 ('R0003',30.0,false),
+	 ('R0003',45.0,false),
+	 ('R0003',240.0,false),
+	 ('R0003',40.0,false),
+	 ('R0003',220.0,false),
+	 ('R0003',210.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0003',200.0,false),
+	 ('R0003',190.0,false),
+	 ('R0003',180.0,false),
+	 ('R0003',170.0,false),
+	 ('R0003',160.0,false),
+	 ('R0003',150.0,false),
+	 ('R0003',140.0,false),
+	 ('R0004',250.0,true),
+	 ('R0004',5.0,true),
+	 ('R0005',90.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0005',30.0,false),
+	 ('R0005',50.0,false),
+	 ('R0005',60.0,false),
+	 ('R0005',70.0,false),
+	 ('R0005',80.0,false),
+	 ('R0005',100.0,false),
+	 ('R0005',120.0,false),
+	 ('R0005',130.0,false),
+	 ('R0005',140.0,false),
+	 ('R0005',20.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0005',110.0,false),
+	 ('R0005',10.0,true),
+	 ('R0005',300.0,false),
+	 ('R0005',400.0,false),
+	 ('R0005',40.0,false),
+	 ('R0005',150.0,false),
+	 ('R0005',200.0,false),
+	 ('R0005',500.0,true),
+	 ('R0006',3.0,true),
+	 ('R0006',150.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0007',2.5,true),
+	 ('R0007',50.0,false),
+	 ('R0007',60.0,false),
+	 ('R0007',15.0,false),
+	 ('R0007',100.0,true),
+	 ('R0007',10.0,false),
+	 ('R0007',40.0,false),
+	 ('R0007',45.0,false),
+	 ('R0007',70.0,false),
+	 ('R0007',80.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0007',90.0,false),
+	 ('R0007',5.0,false),
+	 ('R0007',25.0,false),
+	 ('R0007',35.0,false),
+	 ('R0007',30.0,false),
+	 ('R0007',20.0,false),
+	 ('R0008',6.0,true),
+	 ('R0008',5.0,true),
+	 ('R0008',23.0,true),
+	 ('R0008',14.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0008',12.0,true),
+	 ('R0008',11.0,true),
+	 ('R0008',10.0,true),
+	 ('R0008',13.0,true),
+	 ('R0008',3.0,false),
+	 ('R0008',4.0,false),
+	 ('R0008',21.0,true),
+	 ('R0008',22.0,true),
+	 ('R0008',24.0,true),
+	 ('R0008',25.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0008',1.0,false),
+	 ('R0008',2.0,false),
+	 ('R0008',19.0,true),
+	 ('R0008',18.0,true),
+	 ('R0008',17.0,true),
+	 ('R0008',16.0,true),
+	 ('R0008',20.0,true),
+	 ('R0008',15.0,true),
+	 ('R0008',9.0,true),
+	 ('R0008',8.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0008',7.0,true),
+	 ('R0009',3.0,false),
+	 ('R0009',14.0,true),
+	 ('R0009',15.0,true),
+	 ('R0009',16.0,true),
+	 ('R0009',17.0,true),
+	 ('R0009',18.0,true),
+	 ('R0009',19.0,true),
+	 ('R0009',20.0,true),
+	 ('R0009',21.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0009',22.0,true),
+	 ('R0009',23.0,true),
+	 ('R0009',24.0,true),
+	 ('R0009',25.0,true),
+	 ('R0009',8.0,true),
+	 ('R0009',9.0,true),
+	 ('R0009',6.0,true),
+	 ('R0009',5.0,true),
+	 ('R0009',10.0,true),
+	 ('R0009',7.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0009',11.0,true),
+	 ('R0009',12.0,true),
+	 ('R0009',1.0,false),
+	 ('R0009',2.0,false),
+	 ('R0009',4.0,false),
+	 ('R0009',13.0,true),
+	 ('R0010',13.0,true),
+	 ('R0010',14.0,true),
+	 ('R0010',15.0,true),
+	 ('R0010',16.0,true);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0010',17.0,true),
+	 ('R0010',18.0,true),
+	 ('R0010',12.0,true),
+	 ('R0010',11.0,true),
+	 ('R0010',9.0,true),
+	 ('R0010',8.0,true),
+	 ('R0010',7.0,true),
+	 ('R0010',6.0,true),
+	 ('R0010',5.0,true),
+	 ('R0010',2.0,false);
+INSERT INTO public.roulette_amounts (roulette_id,amount,amount_active) VALUES
+	 ('R0010',4.0,false),
+	 ('R0010',3.0,false),
+	 ('R0010',1.0,false),
+	 ('R0010',25.0,true),
+	 ('R0010',24.0,true),
+	 ('R0010',23.0,true),
+	 ('R0010',22.0,true),
+	 ('R0010',21.0,true),
+	 ('R0010',20.0,true),
+	 ('R0010',19.0,true);
+
+CREATE TABLE public.roulette_settings(
+	id SERIAL PRIMARY KEY,																			/*Id serial*/
+	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id) NOT NULL,						/*Id de la ruleta*/
+	roulette_max_users INTEGER NOT NULL,															/*Maximo numero de usuarios por mesa*/
+	divisa VARCHAR(4) REFERENCES public.divisas(divisa),											/*Tipo de divisa de la mesa DOP | USD*/
+	roulette_min_amount FLOAT NOT NULL DEFAULT 0.0,													/*Minimo real indicado*/
+	roulette_max_amount INTEGER NOT NULL DEFAULT 0,				 									/*Maximo real indicado*/
+	tao_commision FLOAT NOT NULL DEFAULT 0.125, 													/*Comision de la mesa*/
+	roulette_protected_type VARCHAR(4) REFERENCES public.protected_types(type_name) NOT NULL, 		/*Tipo de proteccion de la tabla*/
+	probability VARCHAR(12) REFERENCES public.games_probabilities(probability),						/*Probabalidad de esta ruleta*/
+	roulette_comment TEXT,																			/**/
+	require_users INTEGER NOT NULL DEFAULT 0,				 										/*Minimo numero de usuarios requeridos para abrir la mesa*/
+	max_earning FLOAT NOT NULL DEFAULT 0.0,															/*Minimo real indicado*/
+	min_earning FLOAT NOT NULL DEFAULT 0.0,															/*Minimo real indicado*/
+	user_covers INTEGER NOT NULL DEFAULT 0, 														/*Cuantas fichas de las libres debe tapar el usuario*/
+	user_plays INTEGER NOT NULL DEFAULT 0, 															/*Cuantas fichas de las libres debe tapar el usuario*/
+	roulette_min_invest FLOAT NOT NULL DEFAULT 0.0,													/*Minima inversion requerida*/
+	roulette_max_invest FLOAT NOT NULL DEFAULT 0.0,													/*Maxima inversion requerida*/
+	zero_fix BOOL NOT NULL DEFAULT FALSE,															/*Indica si en esta mesa se deja el 0/00 fijo*/
+	form VARCHAR(12) NOT NULL DEFAULT '-'															/*Indica como se distribuye los espacios vacios a dejar STRAIGHT, PAIR, STREETS, DOZENS, SIXS*/
+);
+INSERT INTO public.roulette_settings (roulette_id,roulette_max_users,divisa,roulette_min_amount,roulette_max_amount,tao_commision,roulette_protected_type,probability,roulette_comment,require_users,max_earning,min_earning,user_covers,user_plays,roulette_min_invest,roulette_max_invest,zero_fix,form) VALUES
+	 ('R0009',1,'DOP',1.0,25,0.1,'X1','92.1','Cubre 33 números de la ruleta y 0/00.',1,22.5,4.5,3,35,175.0,875.0,false,'straights'),
+	 ('R0010',1,'DOP',1.0,25,0.1,'X1','92.1','Cubre 33 números de la ruleta y 0/00.',1,22.5,4.5,3,35,175.0,875.0,false,'straights'),
+	 ('R0005',10,'DOP',100.0,150000,0.15,'X2','89.1','Cubre 0 y 33 numeros de la ruleta',10,510.0,17.0,2,34,340.0,17000.0,false,'streets'),
+	 ('R0001',1,'USD',1.0,25,0.1,'X1','92.1','Cubre 33 numeros y el 0/00',1,22.5,0.9,3,35,35.0,875.0,false,'straights'),
+	 ('R0002',1,'DOP',1.0,80,0.1,'X2','94.5','Cubre 0 y 34 numeros de la ruleta',1,37.0,0.9,2,35,35.0,2800.0,false,'straights'),
+	 ('R0003',124,'DOP',10.0,25000,0.1,'X2','94.5','Cubre 0 y 34 numeros de la ruleta',4,88.7,2.3,2,35,87.5,7000.0,false,'straights'),
+	 ('R0004',10,'DOP',50.0,1250,0.1,'X2','94.5','Cubre 0 y 34 numeros de la ruleta',10,46.2,4.6,2,35,175.0,8750.0,false,'straights'),
+	 ('R0006',66,'DOP',1.0,10000,0.1,'X2','94.5','Cubre 0 y 34 numeros de la ruleta',1,26.2,2.76,2,35,105.0,5250.0,false,'straights'),
+	 ('R0007',50,'DOP',5.0,5000,0.1,'X2','94.5','Cubre 0 y 34 numeros de la ruleta  - El numero de usuarios debe ser par,multiplo de 2',2,2.5,2.25,2,35,87.5,3500.0,false,'straights'),
+	 ('R0008',1,'DOP',1.0,25,0.1,'X1','78.9','Cubre 30 números de la ruleta y 0/00.',1,90.0,18.0,6,32,160.0,800.0,false,'straights');
+
+CREATE TABLE public.crupiers(
+	id SERIAL PRIMARY KEY,														/*Id serial*/
+	affiliate_code VARCHAR(64) UNIQUE NOT NULL, 									/*Id unico de usuario*/
+	username VARCHAR(64) NOT NULL,											/*Nombre del usuario*/
+	userlastname VARCHAR(64) NOT NULL,										/*Apellido del usuario*/
+	user_mail VARCHAR(64) UNIQUE NOT NULL,									/*Correo electronico del usuario*/
+	user_pin TEXT NOT NULL,													/*Contrasena del usuario*/
+	user_active BOOL NOT NULL,												/*Indica si el usuario puede usar la herramienta*/
+	casino_account VARCHAR(64) REFERENCES public.casinos(casino_account), 		/*Casino asociado*/
+	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id)			/*Id de la ruleta*/
+);
+ALTER TABLE crupiers ADD CONSTRAINT no_duplicate_2 UNIQUE (affiliate_code, roulette_id);
+INSERT INTO public.crupiers (affiliate_code,username,userlastname,user_mail,user_pin,user_active,casino_account,roulette_id) VALUES
+	 ('CRP0001','José Ernesto','Morales Ventura','jomorales.ventura@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0003'),
+	 ('CRP0002','Santiago','Perez','sacherokee91@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0005'),
+	 ('CRP0003','Rafael','Oviedo','anonimo3@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0006'),
+	 ('CRP0004','José','Classgap','anonimo44@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0004'),
+	 ('CRP0005','Chica','Number1','anonimo55@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0007'),
+	 ('CRP0006','CRP0006','Anonimo','anonimo6@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0002'),
+	 ('CRP0007','CRP0007','Anonimo','anonimo7@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0001'),
+	 ('CRP0008','CRP0008','Anonimo','anonimo8@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0008'),
+	 ('CRP0009','CRP0009','Anonimo','anonimo9@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0009'),
+	 ('CRP0010','CRP0010','Anonimo','anonimo10@hotmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203',true,'DOM48119','R0010');
+
+CREATE TABLE public.customers(
+	id SERIAL PRIMARY KEY,														/*Id serial*/
+	affiliate_code VARCHAR(64) UNIQUE NOT NULL, 								/*Id unico de usuario*/
+	username VARCHAR(64) NOT NULL,												/*Nombre del usuario*/
+	userlastname VARCHAR(64) NOT NULL,											/*Apellido del usuario*/
+	usermail VARCHAR(64) UNIQUE NOT NULL,										/*Correo electronico del usuario*/
+	user_pin TEXT NOT NULL,														/*Contrasena del usuario*/
+	member_from_date DATE,														/*Fecha de ingreso del usuario*/
+	user_active BOOL NOT NULL,													/*Indica si el usuario puede usar la herramienta*/
+	address TEXT,																/*Direccion fisica del usuario*/
+	document_id VARCHAR(64) NOT NULL,											/*Nombre del usuario*/
+	phone VARCHAR(24) NOT NULL,													/*Numero telefonicor*/
+	casino_account VARCHAR(64) REFERENCES public.casinos(casino_account), 		/*Casino asociado*/
+	roulette_id VARCHAR(64),													/*DEBES DEJAR ESTO AQUI,*/
+	able_to_bet BOOL NOT NULL													/*Usuario indica su disponibilidad para apostar en mesas X2*/
+);
+INSERT INTO public.customers (affiliate_code,username,userlastname,usermail,user_pin,member_from_date,user_active,address,document_id,phone,casino_account,roulette_id,able_to_bet) VALUES
+	 ('AF0001','Briana','Dor','brianador2000@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203','2023-05-23',true,'Calle 4ta, Costa del Este 1','SD256542','809-966-2890','DOM48119','-',False),
+	 ('AF0002','Rafael ','Oviedo','rafaeloviedo576@gmail.com','91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203','2023-06-04',true,'La Toronja','000-0000000-0','829-248-4025','DOM48119','-',False);
+
+CREATE TABLE public.plays(
+	id SERIAL PRIMARY KEY,														/*Id serial*/
+	round_number INTEGER DEFAULT 0,												/*Ronda actual*/
+	free_numbers VARCHAR(12) DEFAULT '-',										/*Numeros a dejar libres*/
+	play_result	 VARCHAR(12),													/*Resultado de la jugada*/
+	play_date TIMESTAMP,														/*Fecha de la jugada*/
+	roulette_id VARCHAR(64) REFERENCES public.roulettes(roulette_id),			/*Id de la ruleta*/
+	affiliate_code VARCHAR(64) REFERENCES public.customers(affiliate_code),		/*Codigo de afiliado*/
+	amount FLOAT DEFAULT 0.0,													/*Monto invertido*/
+	profit FLOAT DEFAULT 0.0,													/*Monto retornado, la ganancia neta*/
+	commision FLOAT DEFAULT 0.0,												/*Comision recibida de la casa*/
+	validated BOOL DEFAULT TRUE,												/*Confirma validez de la jugada*/
+	group_name VARCHAR(512)	NOT NULL DEFAULT '-'								/*Grupo de apuesta*/
+);
+
+CREATE TABLE public.global_access(
+	id SERIAL PRIMARY KEY,															/*Id serial*/
+	affiliate_code VARCHAR(64) UNIQUE,												/*Codigo de afiliado*/
+	access_date TIMESTAMP,															/*Fecha de autenticacion*/
+	log_status BOOL NOT NULL,														/*Estado de la conexion*/
+	casino_account VARCHAR(64) REFERENCES public.casinos(casino_account),			/*Codigo del casino*/
+	roulette_id VARCHAR(64),														/*Codigo de la mesa*/
+	auto_bet_active BOOL NOT NULL DEFAULT false										/*Indica si el usuario puede usar la herramienta*/
+);
+
+CREATE TABLE public.customer_reports(
+	id SERIAL PRIMARY KEY,															/*Id serial*/
+	contact_number VARCHAR(64),														/*Numero de contacto*/
+	affiliate_code VARCHAR(64) REFERENCES public.customers(affiliate_code),			/*Codigo de cliente*/
+	comment TEXT,																	/*Comentario del contacto*/
+	report_date TIMESTAMP															/*Fecha del reporte*/
+);
+
+CREATE TABLE public.deposits(
+	id SERIAL PRIMARY KEY,																/*Id serial*/
+	affiliate_code VARCHAR(64) REFERENCES public.customers(affiliate_code),				/*Codigo de cliente*/														
+	deposit_date TIMESTAMP,																/*Fecha del deposito*/
+	reference VARCHAR(64),																/*Referencia*/
+	op_reference VARCHAR(64),															/*Referencia Operativa*/
+	deposit_amount FLOAT DEFAULT 0,														/*Monto abonado*/
+	deposit_comment TEXT,																/*Comentario del deposito*/
+	deposit_confirmed BOOL																/*Confirmacion del deposito*/
+);
+
+CREATE TABLE public.withdraws(
+	id SERIAL PRIMARY KEY,														/*Id serial*/
+	affiliate_code VARCHAR(64) REFERENCES public.customers(affiliate_code),		/*Codigo de cliente*/														
+	casino_account VARCHAR(64) REFERENCES public.partners(casino_account),		/*Numero de cuenta*/
+	withdraw_date TIMESTAMP,													/*Fecha del deposito*/
+	bill_id VARCHAR(64),														/*Referencia Operativa*/
+	withdraw_amount FLOAT DEFAULT 0,											/*Monto retirado*/
+	withdraw_comment TEXT,														/*Comentario del retiro*/
+	withdraw_confirmed BOOL														/*Confirmacion del retiro*/
+);

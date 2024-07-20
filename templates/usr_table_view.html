@@ -1,0 +1,378 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+{% if session.token %}
+	<div class='container-fluid' style='margin-left:-12px;margin-top:10px;display:flex;flex-wrap: wrap;justify-content:flex-start;position:fixed;top:0;z-index:99'>
+		<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+		<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' data-bs-toggle='offcanvas' href='#offcanvas_menu' role='button' aria-controls='offcanvas_menu' >Men&uacute;</span>
+		<span class='badge bg-primary' style='font-size:11px;margin:2px;cursor:poin;font-family: "OCR-A", monospace;cursor:pointer' data-bs-toggle='offcanvas' href='#offcanvasExample' role='button' aria-controls='offcanvasExample'>Roulette Info</span>
+		<span class='badge bg-warning' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' onclick="exit_table('{{roulette_id}}')"> Dejar la mesa</span>
+		<span class='badge bg-success' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' id='capital_amount'>Balance : {{3000.0}} DOP</span>
+		<span class='badge bg-dark' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;'>{{roulette_data['roulette_protected_type']}}</span>
+	</div>
+{% endif %}
+
+{% set HOUSE_COMISSION = roulette_data['tao_commision'] %}
+{% set USER_PLAYS = roulette_data['user_plays'] %}
+{% set USER_COVERS = 0 %}
+{% set round_number = roulette_data['round_number'] %}
+
+<div class='container-fluid' style='height:90px'></div>
+<div class='container-fluid col-lg-6 col-md-6 col-sm-12 tao_card' style='max-width:315px'>
+	{% if roulette_data['roulette_protected_type'] in ('X1',)%}
+	<div class='col-sm-12 col-md-12'>
+		<!--span class='badge bg-info' data-bs-toggle='offcanvas' href='#offcanvasExample' role='button' aria-controls='offcanvasExample' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;cursor:pointer;margin-bottom:5px'>Inversi&oacute;n vs Pago ($)</span-->
+		<div class='container-fluid table-responsive' style='max-height:150px;padding:0px;margin:0px;'>
+			<table class='table table-sm table-borderless' style='caption-side: top;font-size:11px;padding:0px' id='plays_table'>
+				<!--caption style='caption-side: top;'>Inversi&oacute;n vs Pago ($)</caption-->
+				<thead style='font-size:12px;font-family: "OCR-A", monospace;color:white'>
+					<tr>
+						<th></th>
+						<th class='rounded-2'>Apuesta</th>
+						<!--th class='rounded-2' style='background-color:gray !important'>G.Neta</th-->
+						<!--th class='rounded-2' style='background-color:gray !important'>Comisi&oacute;n</th-->
+						<th class='rounded-2'>Gana</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for index, amount in table_amounts %}
+						{%set amount = amount['amount'] %}
+						{%set bet_amount = amount*USER_PLAYS+USER_COVERS %}
+						{%set g_neta = amount*36 - amount*USER_PLAYS - USER_COVERS%}
+						{%set comission_over_bet = g_neta*HOUSE_COMISSION %}
+						<tr>
+							<td>
+								<div class='casino-chip'>
+								  <div class='casino-chip-inner'>
+								    <div class='casino-chip-front'>
+								      <span class='casino-chip-value'>${{amount}}</span>
+								    </div>
+								  </div>
+								</div>
+							</td>
+							<td>
+								{% if roulette_data['roulette_protected_type'] in ('X2','X3','X6')%}
+									<button type='button' name='set_btn' class='btn btn-sm btn-secondary' style='margin-top:2px;width:100%' id='set_bet_btn{{index}}' disabled>
+										<span style='font-size:11px;font-family: "OCR-A", monospace;'>${{bet_amount|round(2) }}</span>
+									</button>
+								{% else %}
+									<button type='button' name='set_btn' class='btn btn-sm btn-secondary ov-btn-slide-left' style='margin-top:2px;width:100%' id='set_bet_btn{{index}}' onclick="set_bet(this,'{{bet_amount|round(1)}}')">
+										<span style='font-size:11px;font-family: "OCR-A", monospace;'>${{bet_amount|round(2) }}</span>
+									</button>
+								{% endif %}
+							</td>
+							<!--td>
+								{% if g_neta < 0%}
+									<span class="badge bg-danger" style='font-size:11px;font-family: "OCR-A", monospace;margin-top:8px'>${{g_neta}}</span>
+								{% else %}
+									<span class="badge bg-warning" style='font-size:11px;font-family: "OCR-A", monospace;margin-top:8px'>${{g_neta}}</span>
+								{% endif %}
+							</td-->
+							<!--td>
+								<span class='badge bg-dark' style='font-size:11px;font-family: "OCR-A", monospace;margin-top:8px;width:50px'>${{comission_over_bet|round(2)}}</span>
+							</td-->
+							{% set USER_WIN = g_neta - g_neta*HOUSE_COMISSION %}
+							{%set PAY = USER_WIN %}
+							<td>
+								{% if USER_WIN < 0%}
+									<button type='button' class='btn btn-sm btn-danger' style='width:100%;margin-top:2px;' disabled>
+										<span style='font-size:11px;font-family: "OCR-A", monospace;'>+${{ PAY|round(2) }} {{roulette_data['divisa']}}</span>
+									</button>
+								{% else %}
+									<button type='button' class='btn btn-sm btn-success' style='width:100%;margin-top:2px;' disabled>
+										<span style='font-size:11px;font-family: "OCR-A", monospace;'>+${{ PAY|round(2) }} {{roulette_data['divisa']}}</span>
+									</button>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{%endif%}
+	<div class='col-sm-12 col-md-12'>
+		<!--OBJECT-->
+		<div class='object row' style='margin:5px !important' id='disponibility'>
+			<div style='margin-top:10px'>
+				{% if not roulette_data['roulette_protected_type'] in ('X2', 'X3', 'X6')%}
+					<!--OBJECT-->
+					<div class='object row' id='input_amount'>
+						<div class='input-group' style='padding:0px'>
+							<div class='input-group-text'>$</div>
+							<input type='number' class='form-control' name='bet_amount' id='bet_amount' placeholder='Escoja el monto que desea apostar' style='font-size:12px;font-family: "OCR-A", monospace;' required readonly>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+			<div class='text-left' style='padding:0px;opacity:1 !important'>
+				<div class='form-check form-switch'>
+					<label class='form-check-label' for='switch' style='font-weight:bold;color:white'>Apostar</label>
+
+					<span class='badge bg-info  rounded-0' style='margin-left:20px;font-size:10px;cursor:pointer;font-family: "OCR-A", monospace;' onclick="show_message('Jugar ronda',
+					'	Al indicar que vas a jugar est&aacute;s de acuerdo con que el crupier utilice su balance para efectuar 2 apuestas máximas de ser necesario.',
+					'info')">?</span>
+					<!--span class='badge bg-info rounded-0' style='font-size:10px;width:20px;cursor:pointer;font-family: "OCR-A", monospace;' onclick="show_message('Información',
+					'Por probabilidad, las rondas 7,8,9 y 10 tienen menor probabilidad de acierto que las demás. Por ello Siempre puede verificar el n&uacute;mero de ronda a mi lado.',
+					'info')">?</span-->
+					{% if roulette_data['round_number'] >= 7%}
+						<span class='badge bg-danger' name='round_number' style='font-size:11px;font-family: "OCR-A", monospace;' title='Ronda actual'>Ronda #{{roulette_data['round_number']}}</span>
+					{% else %}
+						<span class='badge bg-success' name='round_number' style='font-size:11px;font-family: "OCR-A", monospace;'  title='Ronda actual'>Ronda #{{roulette_data['round_number']}}</span>
+					{% endif %}
+					<input class='form-check-input' type='checkbox' id='switch' onclick="put_bet('{{roulette_id}}',{{USER_PLAYS}},{{USER_COVERS}},'{{roulette_data['roulette_protected_type']}}')" {{on_if}} disabled>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-12 col-md-12'>
+		<!--OBJECT-->
+		<div class='object' id='crupier_orders' style='display:flex;'>
+			<table class='table table-sm table-borderless' style='caption-side: top;font-size:11px;padding:0px' id='plays_table'>
+				</thead>
+				<tbody>
+						<tr>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_1' onclick="show_message('Se generan X numeros aleatorios que deben ser dejados abiertos por el crupier')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_1' name='loader_steps'></span>
+									<span>Bienvenido</span><span class="badge badge-primary badge-pill rounded-1"> (P1)</span>
+								</button>
+							</td>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_2' onclick="show_message('Crupier pide que hagas tu apuesta')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_2' name='loader_steps'></span>
+								 <span> Apueste</span><span class="badge badge-primary badge-pill"> (P2)</span>
+								</button>
+							</td>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_3' onclick="show_message('No más apuestas por favor')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_3' name='loader_steps'></span>
+								 	<span>Apuestas cerradas</span><span class="badge badge-primary badge-pill"> (P3)</span>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_4' onclick="show_message('Calculando total a colocar')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_4' name='loader_steps'></span>
+								 <span>Fichando</span><span class="badge badge-primary badge-pill"> (P4)</span>
+								</button>
+							</td>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_5' onclick="show_message('Espere, la ruleta está girando...')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_5' name='loader_steps'></span>
+									<span>Espere...</span><span class="badge badge-primary badge-pill"> (P5)</span>
+								</button>
+							</td>
+							<td>
+								<button type='button' class='btn btn-sm btn-secondary rounded-1 orders' name='crp_steps' id='crupier_step_6' onclick="show_message('Observa el resultado en el video y/o el pano debajo')">
+									<span class='spinner-border spinner-border-sm' id='loader_crupier_step_6' name='loader_steps'></span>
+								 <span>Ver Resultado</span><span class="badge badge-primary badge-pill"> (P6)</span>
+								</button>
+							</td>
+						</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class='container-fluid col-lg-6 col-md-6 col-sm-12 tao_card' style='max-width:315px;margin-top:5px'>
+	<div style='height:10px'></div>
+	<!--OBJECT-->
+	<div class='object' id='roulette' >
+		<table style='width:100%;caption-side: top;font-family: "OCR-A", monospace;'>
+			<!--caption style='caption-side: top;'>Ruleta</caption-->
+			<tbody>
+				<tr>
+					<td class='paño-tapiz' class='rounded-1'>
+						<div class='street_zero rounded-1'>
+							<div class='number_zero' style='margin-top:5px'><span class='badge rounded-1' id='roulette_btn_0'>{{0}}</span></div>
+						</div>
+					</td>
+					<td style='padding:0px'>
+						<div style='display: flex;'>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(3,0,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street'>
+			                    {% for num in range(6,3,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(9,6,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(12,9,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+						</div>
+					</td>
+					<td style='padding:0px'>
+						<div style='display: flex;'>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(15,12,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(18,15,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(21,18,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(24,21,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+						</div>
+					</td>
+					<td style='padding:0px'>
+						<div style='display: flex;'>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(27,24,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(30,27,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(33,30,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+                       		<div class='street rounded-1'>
+			                    {% for num in range(36,33,-1)%}
+			                        <div class='number border rounded-1'><span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}'>{{num}}</span></div>
+			                    {% endfor %}
+                            </div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<span class='badge bg-danger rounded-0' style='font-size:9px;cursor:pointer;font-family: "OCR-A", monospace;'>x</span> <b style='color:white;font-size:9px;cursor:pointer;font-family: "OCR-A", monospace;'>Pierdes si cae un n&uacute;mero de estos</b>
+    </div>
+    <div style='height:10px'></div>
+</div>
+
+<!-- OTROS-->
+<!--MODAL-->
+<div class='modal' id='cancel_op'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>
+		<div class='alert alert-warning' style='margin-top:2px;font-size:10px;font-family: "OCR-A", monospace;'>
+		  <strong>Operaci&oacute;n cancelada</strong>
+		</div>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-sm btn-danger' data-bs-dismiss='modal'>Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--OFCANVAS-->
+<div class='offcanvas offcanvas-start' tabindex='-1' id='offcanvasExample' aria-labelledby='offcanvasExampleLabel' style='z:index:999999'>
+	<div class='offcanvas-header'>
+		<h5 class='offcanvas-title' id='offcanvasExampleLabel'>Datos de Ruleta</h5>
+		<button type='button' class='btn-close text-reset' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+	</div>
+	<div class='offcanvas-body'>
+		<div class='container-fluid'>
+			<table class='table table-sm table-borderless' style='caption-side: top;font-size:11px;font-family: "OCR-A", monospace;' id='roluette_data'>
+				<caption style='caption-side: top;' >{{roulette_data['roulette_name']}}</caption>
+				<tbody>
+					<tr>
+						<td>
+							<img class='rounded' src="{{ url_for('static', filename=roulette_data['roulette_image']) }}" alt='TAO' width=50>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Divisa</span>
+						</td>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette_data['divisa']}}</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Modo</span>
+						</td>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette_data['roulette_protected_type']}}</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Ruleta</span>
+						</td>
+						<td>
+							<span class='badge bg-primary' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette_id}}</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Probabilidad</span>
+						</td>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette_data['roulette_probability']}} %</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Max.Users</span>
+						</td>
+						<td>
+							<span class='badge bg-danger' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette_data['roulette_max_users']}}</span>
+						</td>
+					</tr>
+					<tr>
+						<td><span style='font-size:11px;font-family: "OCR-A", monospace;'>Usuarios conectados</span>
+						</td>
+						<td>
+							<span id='online_users' style='font-size:11px;font-family: "OCR-A", monospace;'> {{online_users}} </span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Tao</span>
+						</td>
+						<td>
+							<span class='badge bg-success' title='Si cae este n&uacute;mero no tienes ganancias sino que te devuelve $31.75 unidades de tu apuesta' style='cursor:pointer' id='tao_numbers'>{{roulette_data['tao_number']}}</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span style='font-size:11px;font-family: "OCR-A", monospace;'>Abiertos</span>
+						</td>
+						<td>
+							<span class='badge bg-warning' title='Si cae cualquiera de estos n&uacute;mero pierdes tu apuesta' style='font-size:11px;font-family: "OCR-A", monospace;cursor:pointer' id='free_numbers'>{{roulette_data['free_numbers']}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class='container-fluid' style='height:50px'></div>
+
+<!--TIMER-->
+<script src="{{ url_for('static', filename='js/timer_bet.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<title>{% block title %}Tao's Casino{% endblock %}</title>
+		<link rel='icon' href="{{ url_for('static', filename='img/tao_dig.ico') }}" type="image/ico"/>
+		<link rel='stylesheet' href="{{ url_for('static', filename='css/tao.css') }}">
+        <link rel='stylesheet' href="{{ url_for('static', filename='css/roulette.css') }}">
+        <link rel='stylesheet' href="{{ url_for('static', filename='css/button.css') }}">
+		<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+		<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js'></script>
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js'></script>
+		<!--SWEET ALERT-->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+		<!-- JQUERY -->
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+		<style>
+		 	label {display: inline-block;width: 5em;}
+		</style>
+	</head>
+	<body class='paño-user'>
+		<div class='offcanvas offcanvas-start' tabindex='-1' id='offcanvas_menu' aria-labelledby='offcanvasExampleLabel'>
+			<div class='offcanvas-header p-1 bg-primary text-center rounded-0'>
+				<div class='container-fluid offcanvas-title' id='offcanvas_menu_label' style='margin-top:10px'>
+					<a href='/casino' style='color:white;text-decoration:none'>
+						<span><img src="{{ url_for('static', filename='img/tao_let.png') }}" alt='TAO' width=100></span>
+						<span class='arrow col-md-12' style='font-size:10px;font-family: "OCR-A", monospace;'> </span>
+					</a>
+				</div>
+				<button type='button' class='btn-close text-reset' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+			</div>
+			<div class='offcanvas-body' style='display:flex;flex-direction: column;'>
+				<button type='button' class='btn btn-outline-light text-primary shadow-sm' style='border:none;'>
+					<a href='/casino' style='font-size:12px;font-family: "OCR-A", monospace;'> Inicio</a>
+				</button>
+				{% if not session.token %}
+					<button type='button' class='btn btn-outline-light text-primary shadow-sm' style='border:none;'>
+						<a href='/login_page' style='font-size:12px;font-family: "OCR-A", monospace;'> Acceder</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-primary shadow-sm' style='border:none;'>
+						<a href='/signup_page' style='font-size:12px;font-family: "OCR-A", monospace;'> Registro</a>
+					</button>
+				{% endif %}
+				<button type='button' class='btn btn-outline-light text-primary shadow-sm' style='border:none;'>
+					<a href='/help' style='font-size:12px;font-family: "OCR-A", monospace;'> Informaci&oacute;n</a>
+				</button>
+			    {% if session.token %}
+					<button type='button' class='btn btn-outline-light text-primary shadow-sm' style='border:none;'>
+						<a href='/roulettes' style='font-size:11px;font-family: "OCR-A", monospace;'> Roulettes</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-info shadow-sm' style='border:none;'>
+						<a href='/reports' style='font-size:12px;font-family: "OCR-A", monospace;'> Reportes</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-danger shadow-sm' style='border:none;'>
+						<a href='/history' style='font-size:12px;font-family: "OCR-A", monospace;'> Hist&oacute;rico</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-danger shadow-sm' style='border:none;'>
+						<a href='/withdraw' style='font-size:12px;font-family: "OCR-A", monospace;'> Retiro</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-danger shadow-sm' style='border:none;'>
+						<a href='/deposit' style='font-size:12px;font-family: "OCR-A", monospace;'> Dep&oacute;sito</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-danger shadow-sm' style='border:none;'>
+						<a href='/logout' style='font-size:12px;color:red;font-family: "OCR-A", monospace;'> Salir</a>
+					</button>
+			    {% endif %}
+			</div>
+		</div>
+
+		<div class='offcanvas offcanvas-start' tabindex='-1' id='offcanvas_help' aria-labelledby='offcanvasExampleLabel'>
+			<div class='offcanvas-header p-1 bg-primary text-center rounded-0'>
+				<div class='container-fluid offcanvas-title' id='offcanvas_help_label' style='margin-top:10px'>
+					<a href='/casino' style='color:white;text-decoration:none'>
+						<span>
+							<img src="{{ url_for('static', filename='img/tao_let.png') }}" alt='TAO' width=100>
+						</span>
+					</a>
+				</div>
+				<button type='button' class='btn-close text-reset' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+			</div>
+
+			<div class='offcanvas-body' style='display:flex;flex-wrap: wrap;'>
+				<div class='container-fluid table-responsive' style='margin-top:5px'>
+					<table class='table table-sm table-borderless' style='caption-side: top;font-size:12px;font-family: "OCR-A", monospace;'>
+						<caption style='font-size:12px;caption-side: top;'>Leyenda</caption>
+						<tbody>
+							<tr>
+								<td><span class='badge bg-info rounded-1' style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>X1</span></td>
+								<td><span style='font-size:12px;font-family: "OCR-A", monospace;'>M&eacute;todo de inversi&oacute;n y protecci&oacute;n. </span></td>
+							</tr>
+							<tr>
+								<td><span class='badge bg-success rounded-1' style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>94.5 %</span></td>
+								<td><span>Probabilidad de victoria por ronda</span></td>
+							</tr>
+							<tr>
+								<td><span style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>3.0%</span></td>
+								<td><span>Comisi&oacute;n de la casa</span></td>
+							</tr>
+							<tr>
+								<td><span class='badge bg-success rounded-1' style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>{{'... (422 USD)'}}</span></td>
+								<td><span>Lo m&aacute;ximo que puede apostar</span></td>
+							</tr>
+							<tr>
+								<td><span class='badge bg-success' style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>X2</span></td>
+								<td><span style='font-size:12px;font-family: "OCR-A", monospace;'>Apueste aplicando la mayor seguridad disponible para proteger su capital y recuperar sus ganancias. Estas mesas tienen una probabilidad de victoria hasta de un <span class='badge bg-success' style='font-weight:bold;font-size:13px;font-family: "OCR-A", monospace;'>94.5%</span> en cada ronda y 2 oportunidades para recuperar el capital ante un fallo previo. No requiere su intervenci&oacute;n, el crupier de la mesa ejecuta las jugadas necesarias por usted en el orden necesario. Usted solo debe elegir cuando est&eacute; disponible para que el crupier
+								haga crecer su cuenta. <code>Este tipo de ruleta puede generar mayor beneficio y tiene mayor seguridad que las mesas X1 ya que cuando ocurre un p&eacute;rdida se efectua una nueva jugada que de ser ganadora retornar&aacute; cualquier monto perdido previamente y obtiene en beneficio la m&aacute;xima ganancia de la mesa.</code></span></td>
+							</tr>
+							<tr>
+								<td><span class='badge bg-danger' style='font-weight:bold;font-size:12px;font-family: "OCR-A", monospace;'>X1</span></td>
+								<td><span style='font-size:12px;font-family: "OCR-A", monospace;'>Usted puede invertir cualquier monto de los disponibles en esta ruleta con una probabilidad de acierto superior o igual a <span class='badge bg-success' style='font-weight:bold;font-size:13px;font-family: "OCR-A", monospace;'>92.1%</span>. Esta es una mesa de <code>alto riesgo</code> y se aconseja rotundamente que ejecute una cantidad determinada de rondas hasta alcanzar un beneficio definido y se retire. Esta mesa tambi&eacute;n tiene doble protecci&oacute;n contra p&eacute;rdidas pero usted es quien decide si lo quiere utilizar o no, es simple primero invierta con el monto m&aacute;s bajo y si llega a perder invierta en la pr&oacute;xima ronda el monto m&aacute;s alto disponible.</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class='container-fluid'>
+			{% block content %}{% endblock %}
+		</div>
+
+		<div class='container-fluid' style='position:fixed;bottom:0;padding:0px;margin:0px'>
+			<pre class='text-center' style='color:white;margin:2px;font-size:10px;font-family: "OCR-A", monospace;z-index:99999'>&copy; 2023 Tao's Casino from SoftNow <img src="{{ url_for('static', filename='img/Softnow.ico') }}" alt='Softnow' width=25></pre>
+		</div>
+	</body>
+	<script src="{{ url_for('static', filename='js/tao.js') }}"></script>
+</html>

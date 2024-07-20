@@ -1,0 +1,266 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+{% if session.token %}
+	<div class='container-fluid' style='margin-left:-12px;margin-top:10px;display:flex;flex-wrap: wrap;justify-content:flex-start;position:fixed;top:0;z-index:99'>
+		<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+		<span class='badge bg-dark' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;'>{{roulette_data['roulette_protected_type']}}</span>
+		<span class='badge bg-danger' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;'><a href='/logout' style='font-size:12px;color:white;font-family: "OCR-A", monospace;'> Salir</a></span>
+		
+	</div>
+{% endif %}
+
+{% set HOUSE_COMISSION = roulette_data['tao_commision'] %}
+{% set USER_PLAYS = roulette_data['user_plays'] %}
+{% set USER_COVERS = roulette_data['user_covers'] %}
+{% set round_number = roulette_data['round_number'] %}
+
+<div class='container-fluid' style='height:80px'></div>
+<div class='container-fluid' style="display:flex;justify-content:center">
+	<div class='container-fluid col-lg-3 col-md-3 col-sm-12' style='margin:1px'>
+		<div class='col-sm-12 col-md-12'>
+			<!--OBJECT-->
+			<div class='object' id='crupier_orders' style='display:flex;'>
+				<table class='table table-sm table-borderless' style='caption-side: top;font-size:11px;padding:0px' id='plays_table'>
+					</thead>
+					<tbody>
+							<tr>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_1' title='Genera los numeros a dejar abiertos' onclick='set_open_numbers()'>Rand #'s <span class="badge badge-primary badge-pill">(P1)</span>
+									</button>
+								</td>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_2' title='Diga a los usuarios que coloquen sus apuestas' onclick='bet_now()'>Apuesten <span class="badge badge-primary badge-pill">(P2)</span>
+									</button>
+								</td>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_3' title='Ya, no más apuestas, vamos a jugar' onclick='no_more_bets()'>No m&aacute;s ....<span class="badge badge-primary badge-pill">(P3)</span>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_5' title='Vaya a la ruleta y coloque la ficha indicada en las posiciones correspondientes' onclick='spin_roulette()'>Ir a Ruleta <span class="badge badge-primary badge-pill">(P5)</span>
+									</button>
+								</td>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_6' title=' *Haga* clic en el número que salio en la ruleta a tu derecha' onclick='publish_result()'>Reportar <span class="badge badge-primary badge-pill">(P6)</span>
+									</button>
+								</td>
+								<td>
+									<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin:1px;font-size:12px;font-family: "OCR-A", monospace;width:100%;height:50px' name='crp_steps' id='crupier_step_0' title='Procede a hacer una nueva ronda' onclick='reset_all()'>Nueva<span class="badge badge-primary badge-pill">(P7)</span>
+									</button>
+								</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class='container-fluid col-lg-1 col-md-1 col-sm-12' style='margin:1px'>
+		<div class='col-sm-12 col-md-12'>
+			{% if roulette_data['roulette_protected_type'] in ('X2','X3','X6')%}
+				<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin-top:5px;font-size:12px;font-family: "OCR-A", monospace;height:50px' name='crp_steps' id='crupier_step_4' title='TAO calcula el monto a colocar en cada posición' onclick="calculate_unitary_amount('protected')">Tomar <span class="badge badge-primary badge-pill">(P4)</span>
+				</button>
+			{% else %}
+				<button type='button' class='btn btn-sm btn-secondary rounded-1 ov-btn-slide-left' style='opacity:0.9;margin-top:5px;font-size:12px;font-family: "OCR-A", monospace;height:50px' name='crp_steps' id='crupier_step_4' title='TAO calcula el monto a colocar en cada posición' onclick="calculate_unitary_amount('freeplay')">Calcular <span class="badge badge-primary badge-pill">(P4)</span>
+				</button>
+			{% endif %}
+			<div style='height:10px'></div>
+			<div class='casino-chip-admin'>
+			  <div class='casino-chip-admin-inner'>
+			    <div class='casino-chip-admin-front'>
+			      <span class='casino-chip-admin-value' id='put_coin'>0</span>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+	<div class='container-fluid col-lg-2 col-md-2 col-sm-12' style='margin:1px;min-width:300px'>
+		<div style='height:5px'></div>
+		<!--OBJECT-->
+		<div class='object rounded-1' id='roulette'>
+			<table style='width:100%;caption-side: top;font-family: "OCR-A", monospace;'>
+				<!--caption style='caption-side: top;'>Ruleta</caption-->
+				<tbody>
+					<tr>
+						<td style='background-color:green' class='rounded-1 border'>
+							<div class='street_zero rounded-1'>
+								<div class='number_zero' style='margin-top:5px'>
+									<span class='badge rounded-1' id='roulette_btn_0' onclick="set_result_number(0)">{{0}}</span></div>
+							</div>
+						</td>
+						<td style='padding:0px'>
+							<div style='display: flex;'>
+	           		<div class='street rounded-1'>
+		              {% for num in range(3,0,-1)%}
+		                  <div class='number border rounded-1'>
+		                  	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+		                  </div>
+		              {% endfor %}
+	              </div>
+	           		<div class='street'>
+		              {% for num in range(6,3,-1)%}
+		                  <div class='number border rounded-1'>
+		                  	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+		                  </div>
+		              {% endfor %}
+	              </div>
+	           		<div class='street rounded-1'>
+		              {% for num in range(9,6,-1)%}
+		                  <div class='number border rounded-1'>
+		                  	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+		                  </div>
+		              {% endfor %}
+	               </div>
+	           		<div class='street rounded-1'>
+		              {% for num in range(12,9,-1)%}
+		                  <div class='number border rounded-1'>
+		                  	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+		                  </div>
+		              {% endfor %}
+	               </div>
+							</div>
+						</td>
+						<td style='padding:0px'>
+							<div style='display: flex;'>
+	             		<div class='street rounded-1'>
+	                {% for num in range(15,12,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(18,15,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(21,18,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(24,21,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+							</div>
+						</td>
+						<td style='padding:0px'>
+							<div style='display: flex;'>
+	             		<div class='street rounded-1'>
+	                {% for num in range(27,24,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(30,27,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(33,30,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+	             		<div class='street rounded-1'>
+	                {% for num in range(36,33,-1)%}
+	                    <div class='number border rounded-1'>
+	                    	<span class='badge bg-secondary rounded-1' id='roulette_btn_{{num}}' onclick="set_result_number({{num}})">{{num}}</span>
+	                    </div>
+	                {% endfor %}
+	                  </div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class='badge bg-danger rounded-0' style='font-size:8px;cursor:pointer;font-family: "OCR-A", monospace;'>x</span> <i style='color:white;font-size:10px;cursor:pointer;font-family: "OCR-A", monospace;'>Pierdes si cae un n&uacute;mero de estos</i>
+
+			<div style='height:10px'></div>
+			<div class='table-responsive rounded-1'>
+				<table class='table table-sm table-stripped table-hover' style='width:100%;caption-side: top;font-size:12px;font-family: "OCR-A", monospace;'>
+					<caption style='caption-side: top;'>Usuarios conectados</caption>
+					<thead>
+						<tr>
+							<th>
+								<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>AFILIADO</span>
+							</th>
+							<th>
+								<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>LOG</span>
+							</th>
+							<th>
+								<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>AUTO BET (X2)</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in active_users%}
+							<tr>
+								<td>
+									<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>{{user['affiliate_code']}}</span>
+								</td>
+								<td>
+									<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>{{user['log_status']}}</span>
+								</td>
+								<td>
+									<span style='color:white;font-size:9px;font-family: "OCR-A", monospace;'>{{user['auto_bet_active']}}</span>
+								</td>
+							</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+			</div>
+
+	  </div>
+		<!--OBJECT-->
+		<!--div class='object'>
+			<div class='container-fluid' style='display:flex;flex-direction:row;justify-content: center;flex-direction:column;padding:0px;'>
+				<button type='button' class='btn btn-sm btn-success rounded-1' style='max-width:285px;margin:1px;font-size:10px;font-family: "OCR-A", monospace;flex-grow:2' id='report_win_btn' title='Clic si gano la jugada' onclick='report_win()' disabled>🤑 YOU WIN 🤑</button>
+				<button type='button' class='btn btn-sm btn-danger rounded-1' style='max-width:285px;margin:1px;font-size:10px;font-family: "OCR-A", monospace;;flex-grow:2' id='report_loss_btn' title='Clic si perdio la jugada' onclick='report_loss()' disabled>⛔ YOU LOSS ⛔</button>
+			</div>
+			<div style='height:10px'></div>
+		</div-->
+
+	  <div style='height:10px'></div>
+	</div>
+</div>
+
+<!-- OTROS-->
+<!--MODAL-->
+<div class='modal' id='cancel_op'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>
+		<div class='alert alert-warning' style='margin-top:2px;font-size:10px;font-family: "OCR-A", monospace;'>
+		  <strong>Operaci&oacute;n cancelada</strong>
+		</div>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-sm btn-danger' data-bs-dismiss='modal'>Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='container-fluid' style='height:50px'></div>
+
+<!--TIMER-->
+<script src="{{ url_for('static', filename='js/admin_controls.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block content %}
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+			<span class='badge bg-dark' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' data-bs-toggle='offcanvas' href='#offcanvas_menu' role='button' aria-controls='offcanvas_menu' >Men&uacute;</span>
+		</div>
+	{% endif %}
+	<hr class='border border-danger'>
+	<div class='container-fluid row' style='margin:0px;padding:0px;margin-bottom:10px'>
+		<table class='table table-sm table-borderless' style='caption-side: top;font-size:13px;font-family: "OCR-A", monospace;' id='bet_history'>
+			<caption >Hist&oacute;rico de apuestas</caption>
+			<thead class='table-dark' style='font-size:11px;font-family: "OCR-A", monospace;'>
+				<tr>
+					<th>Mesa</th>
+					<th>Fecha</th>
+					<th>Apuesta</th>
+					<th>Resultado</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class='border-top'>
+					<td>R0001</td>
+					<td>22 Mayo</td>
+					<td>$352.0</td>
+					<td><span class='badge bg-success' title='$357.0'>Gan&oacute;</span></td>
+				</tr>
+				<tr class='border-top'>
+					<td>R0002</td>
+					<td>22 Mayo</td>
+					<td>$702.0</td>
+					<td><span class='badge bg-success' title='$715.75'>Gan&oacute;</span></td>
+				</tr>
+				<tr class='border-top'>
+					<td>R0001</td>
+					<td>25 Mayo</td>
+					<td>$2102.0</td>
+					<td><span class='badge bg-success' title='$2150.75'>Gan&oacute;</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}

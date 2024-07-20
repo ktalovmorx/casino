@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block content %}
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+			<span class='badge bg-dark' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' data-bs-toggle='offcanvas' href='#offcanvas_menu' role='button' aria-controls='offcanvas_menu' >Men&uacute;</span>
+		</div>
+	{% endif %}
+	<hr class='border border-danger'>
+	<div class='container-fluid'>
+		<form method='POST' action='/send_report' enctype='multipart/form-data' class='was-validated form-control'>
+			<div class='container-fluid'>
+				<div class='row' style='margin-top:10px'>
+					<div class='col'><span>N&uacute;mero de Contacto</span></div>
+					<div class='col'><input type='phone' class='form-control' id='contact_number' name='contact_number' required></div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col'><span>Correo Electr&oacute;nico</span></div>
+					<div class='col'><input type='email' class='form-control' id='contact_mail' name='contact_mail' required></div>
+				</div>
+				<div class='row' style='margin-top:10px'>
+					<div class='col'><span>Comentario</span></div>
+					<div class='col'><textarea class='form-control' rows='5' id='comment' name='text'></textarea></div>
+				</div>
+				<div class='row' style='margin:0px;padding:0px'>
+					<div class='col' style='margin:0px;padding:0px'>
+						<span>Imagen</span>
+					</div>
+					<div class='col'><input class='btn btn-outline-light text-dark btn-lg' type='file' name='file' style='font-size:9px;' aria-label='Select a file' required></div>
+				</div>
+				<div class='row' style='margin:0px;padding:0px'>
+					<div class='col' style='margin:0px;padding:0px'>
+						<input class='btn btn-success btn-lg' type='submit' value='Enviar reporte' style='font-size:12px;width:100%'>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}

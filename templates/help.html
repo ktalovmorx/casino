@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+	<div class='container-fluid text-center rounded-1' style='width:100%;margin-bottom:10px;margin-top:10px'>
+		<div class='container-fluid' style='margin-top:10px'>
+			<a href='/casino' style='color:white;text-decoration:none'>
+				<span><img src="{{ url_for('static', filename='img/tao_let.png') }}" alt='TAO' width=100></span><span class='arrow col-md-12' style='font-size:10px;font-family: "OCR-A", monospace;'> </span>
+			</a>
+		</div>
+		<div class='container-fluid row' style='margin:0px;padding:0px;margin-bottom:10px'>
+			<div class='flex-container' style='padding:0px;margin:0px'>
+				<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+					<a href='/casino' style='font-size:13px;font-family: "OCR-A", monospace;'> Inicio</a>
+				</button>
+				{% if not session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/login_page' style='font-size:13px;font-family: "OCR-A", monospace;'> Acceder</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/signup_page' style='font-size:13px;font-family: "OCR-A", monospace;'> Registro</a>
+					</button>
+				{% endif %}
+			    {% if session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/roulettes' style='font-size:13px;font-family: "OCR-A", monospace;'> Roulettes</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/logout' style='font-size:13px;color:red;font-family: "OCR-A", monospace;'> Salir</a>
+					</button>
+			    {% endif %}
+			</div>
+		</div>
+	</div>
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+		</div>
+	{% endif %}
+	<hr class='border border-success'>
+	<div class='container-fluid row tao_card' style='margin:0px;padding:0px'>
+		<span style='color:white;;text-indent: 30px;font-size:12px;font-family: "OCR-A", monospace;'>
+			En TAO disponemos de estrategias para obtener beneficios de los casinos con probabilidades de obtener la victoria desde un 67.5% hasta un 94.5%.
+			Aumentar la probabilidad de victoria disminuye el retorno monetario, por lo cual, mientras mayor es la probabilidad de obtener una victoria menor ser&aacute; el monto de retorno del casino donde operamos. Por ello, ac&aacute; determinamos que al efectuar varias jugadas sucesivas podr&aaute;s aprovechar rachas positivas para obtener el beneficio diario deseado y retirarte antes que ocurra un fallo.<br><br>
+			El jugador que va al casino va y apuesta buscando obtener grandes beneficios con baja probabilidad de victoria quedando a merced del casino, nosotros cambiamos el juego, el casino queda a merced nuestro a cambio de un bajo retorno monetario pero con grandes cantidades de victorias consecutivas.<br><br>
+			Usted no tiene que elegir ning&uacute;n n&uacute;mero, la estrategia ya est&aacute; definida y nuestro crupier hace las jugadas. En cada victoria se acredita
+			su ganancia a su cuenta y se cobra una super baja comisi&oacute;n fija por jugada.<br><br>
+			Se dar&aacute; cuenta por usted mismo la cantidad de veces que obtendr&aacute; victorias, comience con bajas inversiones y vea los resultados antes de decidir
+			pasar a montos superiores.<br><br>
+			Siempre defina un monto de ganancia diario y retirese una vez lo haya alcanzado. Si es usted un usuario que quiere ver
+			su cuenta crecer sin hacer mucho esfuerzo tenemos mesas de tipo X2 que son atendidas por nuestros crupiers autom&aacute;ticamente, usted solo agrega el capital, indica su aprobaci&oacute;n para usar su capital y nuestro crupier utilizara sus fondos para copiar lo mismo que hacemos en su cuenta.<br><br>
+	   </span>
+	   <br><br><br>
+		<span style='font-weight: bold;color:white'><br>Apueste de forma responsable, si siente que tiene problemas de adicci&oacute;n al juego busque ayuda y no continue apostando</span><br>
+		<div class='container-fluid' style='height:10px'></div>
+	</div>
+	<div class='container-fluid shadow-sm tao_card' style='margin-top:10px'>
+		<strong><span class='text-success' style='color:white;font-weight:bold;font-size:13px;font-family: "OCR-A", monospace;'><code>Las inversiones de apuestas siempre conllevan riesgos, al hacer uso nuestro sistema usted actua bajo su propio riesgo al confiar en nuestras estrategias que cl&aacute;ramente indican el porcentaje de probabilidad que brinda en cada una de sus configuraciones. Si va a utilizar nuestra estrategia siempre tenga en cuenta lo primordial:</code></span></strong>
+		<ul style='color:white;;font-size:13px;font-family: "OCR-A", monospace;'>
+			<li>Debes ser mayor de edad</li>
+			<li>Si nunca has jugado a la ruleta ve a un casino, juega y luego regresa aqu&iacute;.</li>
+			<li>Apuestas son apuestas.</li>
+			<li>Tenga siempre en su mente un monto fijo a obtener diario o por per&iacute;odos de tiempo.</li>
+			<li>No ambicione, si ya alcanz&oacute; el beneficio deseado entonces ret&iacute;rese y disfrute sus ganancias.</li>
+			<li>Lea atentamente nuestras recomendaciones y la secci&oacute;n informativo de nuestra plataforma <a href='/help' title='informaciones importantes'>ver aqu&iacute;</a>.</li>
+			<li>Apostar no debe verse como una fuente de ingresos, v&eacute;alo como mera diversi&oacute;n lucrativa.</li>
+			<li>No invierta si no entiende como funciona este sistema.</li>
+			<li>TAO ni su personal se hace responsable por p&eacute;rdidas ocasionadas al utilizar nuestros servicios, solo brindamos una buena forma de ganar dinero r&aacute;pido con alta probabilidad, <code>no es infalible, por el momento.</code></li>
+		</ul>
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}

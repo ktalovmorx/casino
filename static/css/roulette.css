@@ -1,0 +1,147 @@
+.roulette {
+  width: 400px;
+  height: 400px;
+  background-color: green;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.flex-container_roulette {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: white;
+  justify-content: center;
+  justify-content: space-around;
+  border-radius:8px;
+}
+
+/* ELEMENTOS RULETA */
+.number_zero {
+  text-align: center;
+  font-size:11px;
+}
+
+.number {
+  text-align: center;
+  font-size:11px;
+  background-color:#6C757D !important;
+}
+
+.number:hover > span, .number_zero:hover > span{
+  background-color:orange !important;
+  cursor:pointer;
+}
+
+.street_zero{
+  background-color:green;
+  opacity:0.9
+}
+
+.street{
+  background-color:gray;
+  opacity:0.9
+}
+
+/* FICHAS DE CASINO*/
+.casino-chip-admin {
+  width: 80px;
+  height: 50px;
+  border-radius: 5%;
+  background-color: #ffcc00;
+  position: relative;
+  overflow: hidden;
+  opacity:0.9;
+}
+.casino-chip-admin-inner {
+  width: 80%;
+  height: 80%;
+  background-color: #000;
+  border-radius: 5%;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+
+.casino-chip-admin-front {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.casino-chip-admin-front {
+  background-color: transparent;
+}
+
+.casino-chip-admin-value {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 3px;
+  font-size:11px;
+}
+
+.casino-chip {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ffcc00;
+  position: relative;
+  overflow: hidden;
+}
+
+.casino-chip-inner {
+  width: 80%;
+  height: 80%;
+  background-color: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+
+.casino-chip-front {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.casino-chip-front {
+  background-color: transparent;
+}
+
+.casino-chip-value {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 0px;
+}
+
+.paño-admin {
+  /*background-color: #00796B;*/
+  background-image: url("/static/img/tapiz6.avif");
+  background-position: center center;
+  background-repeat: repeat;
+}
+
+.paño-user {
+  /*background-color: #00796B;*/
+  background-image: url("/static/img/tapiz.jpg");
+  background-position: center center;
+  background-repeat: repeat;
+}
+
+
+

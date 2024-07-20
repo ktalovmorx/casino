@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+			<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' data-bs-toggle='offcanvas' href='#offcanvas_menu' role='button' aria-controls='offcanvas_menu' >Men&uacute;</span>
+			<span class='badge bg-primary' style='font-size:11px;margin:2px;font-family: "OCR-A", monospace;cursor:pointer;' data-bs-toggle='offcanvas' href='#offcanvas_help' role='button' aria-controls='offcanvas_help' >Ayuda</span>
+		</div>
+	{% endif %}
+	<hr class='border border-success'>
+	<!--div>
+		<div class='alert alert-success' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;cursor:pointer;width:80%'>
+		  <strong>Bienvenido!</strong>, escoja una mesa de su preferencia.
+		</div>
+	</div-->
+	<div style='display:flex;flex-wrap: wrap;'>
+		{% for roulette in roulettes %}
+			<div class='container col-md-2 col-sm-12 tao_card rounded-4' style='margin:2px'>
+				<form method='GET' action='/table/{{roulette.roulette_id}}'>
+					<table class='table table-sm table-hover table-borderless' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;'>
+						<caption style='font-size:12px;font-weight:bold;caption-side: top;'>
+							<span class='badge bg-dark'>
+								<span style='text-wrap:wrap'>{{roulette.roulette_name}} </span>
+							</span>
+						</caption>
+						<tbody>
+							<tr >
+								<td colspan=2 >
+									<input type='image' class='rounded' src="{{ url_for('static', filename=roulette.roulette_image) }}" style='cursor:pointer;height:80px' title="{{roulette['max_earning']}} {{roulette['divisa']}}"><!-- title="{{roulette['roulette_comment']}}" -->
+								</td>
+							</tr>
+							<tr>
+								<td style='color:white;font-weight:bold'>Roulette</td>
+								<td>
+									<span title='Identificador de la ruleta' style='font-size:14px;;color:white;font-weight:bold'>{{roulette.roulette_id}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Probabilidad</td>
+								<td><span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_probability']}} %</span></td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Tipo</td>
+								<td> 
+									{% if roulette['roulette_protected_type'] == 'X1'%}
+										<span class='badge bg-danger' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_protected_type']}}</span>
+									{% elif roulette['roulette_protected_type'] == 'X2'%}
+										<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_protected_type']}}</span>
+									{%else%}
+										<span class='badge bg-warning' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_protected_type']}}</span>
+									{%endif%}
+								</td>
+							</tr>
+							<!--tr>
+								<td>C.Comisi&oacute;n</td>
+								<td> <span title='Comisi&oacute;n de la casa'> {{roulette['tao_commision']*100}} %</span></td>
+							</tr-->
+							<tr>
+								<td style=';color:white;font-weight:bold'>Moneda</td>
+								<td> <a href='https://www.infodolar.com.do' target='_blank' title='Moneda utilizada en la mesa' style='font-size:13px;font-family: "OCR-A", monospace;color:white'>{{roulette['divisa']}}</a></td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Max.Users</td>
+								<td>
+									<span style='font-size:11px;font-family: "OCR-A", monospace;color:white'> {{roulette['roulette_max_users']}} </span>
+								</td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Conectados</td>
+								<td>
+									<span class='spinner-border spinner-border-sm'></span>
+									<span style='font-size:11px;font-family: "OCR-A", monospace;color:white'>{{roulette['online_users']}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Mín.Inversi&oacute;n</td>
+								<td> 
+									<span class='badge bg-primary' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_min_invest']}} {{roulette['divisa']}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>Max.Inversi&oacute;n</td>
+								<td> 
+									<span class='badge bg-primary' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_max_invest']}} {{roulette['divisa']}}</span>
+								</td>
+								<!--td> 
+									{% if 'FREE INVEST' in roulette['roulette_comment']%}
+										<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_comment']}}</span>
+									{% elif 'GANSTERS' in roulette['roulette_comment']%}
+										<span class='badge bg-dark' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_comment']}}</span>
+									{% elif 'HIGH INVEST' in roulette['roulette_comment']%}
+										<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_comment']}}</span>
+									{% elif 'MEDIUM INVEST' in roulette['roulette_comment']%}
+										<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_comment']}}</span>
+									{% else %}
+										<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'>{{roulette['roulette_comment']}}</span>
+									{% endif %}
+								</td-->
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>M&iacute;n. Ganancia</td>
+								<td>
+									<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'> {{roulette['min_earning']}} {{roulette['divisa']}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td style=';color:white;font-weight:bold'>M&aacute;x. Ganancia</td>
+								<td>
+									<span class='badge bg-success' style='font-size:11px;font-family: "OCR-A", monospace;'> {{roulette['max_earning']}} {{roulette['divisa']}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}

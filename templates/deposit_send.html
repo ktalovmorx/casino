@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block note %}<br><span style='font-size:8px;'>by craazybones</span>{% endblock %}
+{% block content %}
+	<div class='container-fluid text-center' style='width:100%;margin-bottom:10px;margin-top:10px'>
+		<div class='container-fluid' style='margin-top:10px'>
+			<a href='/casino' style='color:white;text-decoration:none'>
+				<span><img src="{{ url_for('static', filename='img/tao_let.png') }}" alt='TAO' width=100></span><span class='arrow col-md-12' style='font-size:10px;font-family: "OCR-A", monospace;'> </span>
+			</a>
+		</div>
+		<div class='container-fluid row' style='margin:0px;padding:0px;margin-bottom:10px'>
+			<div class='flex-container' style='padding:0px;margin:0px'>
+				<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+					<a href='/casino' style='font-size:13px;font-family: "OCR-A", monospace;'> Inicio</a>
+				</button>
+				{% if not session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/login_page' style='font-size:13px;font-family: "OCR-A", monospace;'> Acceder</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/signup_page' style='font-size:13px;font-family: "OCR-A", monospace;'> Registro</a>
+					</button>
+				{% endif %}
+				<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+					<a href='/help' style='font-size:13px;font-family: "OCR-A", monospace;'> Informaci&oacute;n</a>
+				</button>
+			    {% if session.token %}
+					<button type='button' class='tao_menu btn btn-outline-light text-primary' style='border:none;'>
+						<a href='/roulettes' style='font-size:13px;font-family: "OCR-A", monospace;'> Casino</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-info' style='border:none;'>
+						<a href='/reports' style='font-size:13px;font-family: "OCR-A", monospace;'> Reportes</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/history' style='font-size:13px;font-family: "OCR-A", monospace;'> Hist&oacute;rico</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/withdraw' style='font-size:13px;font-family: "OCR-A", monospace;'> Retiro</a>
+					</button>
+					<button type='button' class='tao_menu btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/deposit' style='font-size:13px;font-family: "OCR-A", monospace;'> Dep&oacute;sito</a>
+					</button>
+					<button type='button' class='btn btn-outline-light text-danger' style='border:none;'>
+						<a href='/logout' style='font-size:13px;color:red;font-family: "OCR-A", monospace;'> Salir</a>
+					</button>
+			    {% endif %}
+			</div>
+		</div>
+	</div>
+	{% if session.token %}
+		<div class='container-fluid' style='margin-top:10px;display:flex;padding:0px'>
+			<span class='badge bg-primary' style='caption-side: top;font-size:10px;font-family: "OCR-A", monospace;cursor:pointer'>{{session['username']}} {{session['userlastname']}} | {{session['affiliate_code']}}</span>
+		</div>
+	{% endif %}
+	<hr class='border border-danger'>
+	<div class='container-fluid row' style='margin:0px;padding:0px'>
+		<div class='alert alert-success'>
+		  <strong>Pago enviado!</strong> Nuestro personal verificará su transacción ahora mismo, en unos momentos su nuevo saldo será actualizado en su cuenta, gracias y le deseamos suerte en sus apuestas!. Recuerde siempre tener un l&iacute;mite y una vez alcanzado el limite det&eacute;ngase y ret&iacute;rese.<br>
+		  Apueste de forma responsable, si siente que tiene problemas de adicci&oacute;n al juego busque ayuda y no invierta m&aacute;s.
+		</div>
+	</div>
+	<div class='container-fluid' style='height:50px'></div>
+{% endblock %}
