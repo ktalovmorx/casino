@@ -15,9 +15,10 @@ pip install -r requirements.txt
 <h3>Ejecución del Servidor</h3>
 
 ```
-git clone https://github.com/ktalovmorx/casino.git
-cd casino
-python app_tao.py
+- git clone https://github.com/ktalovmorx/casino.git
+- Abra su gestor de base de datos y cree su base de datos desde tao.db
+- cd casino
+- python app_tao.py
 ```
 
 <h3>José Ernesto Morales Ventura | San Cristóbal | República Dominicana</h3>
