@@ -69,6 +69,7 @@ pip install -r requirements.txt
 
 <h3>PARTNERS</h3>
 <table class="table">
+    <caption>No aplica para autenticación</caption>
     <thead>
         <th>Partner</th>
         <th>Password</th>
@@ -87,6 +88,7 @@ pip install -r requirements.txt
 
 <h3>ADMINS</h3>
 <table class="table">
+    <caption>No aplica para autenticación</caption>
     <thead>
         <th>Admin</th>
         <th>Password</th>
